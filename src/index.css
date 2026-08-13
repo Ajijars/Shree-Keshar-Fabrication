@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --color-maroon-950: #3d0a0a;
+  --color-maroon-900: #5c1010;
+  --color-maroon-800: #7b1818;
+  --color-maroon-700: #9a2222;
+  --color-saffron-500: #ff9933;
+  --color-saffron-400: #ffb366;
+  --color-gold-500: #d4af37;
+  --color-gold-400: #e8c547;
+  --color-cream-50: #fffbf5;
+  --color-cream-100: #fff8f0;
+  --color-cream-200: #f5ebe0;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Poppins", system-ui, sans-serif;
+  --font-devanagari: "Noto Sans Devanagari", "Poppins", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-cream-50);
+  color: #2d2a26;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-devanagari {
+  font-family: var(--font-devanagari);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Decorative pattern overlay */
+.pattern-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease-out forwards;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
