@@ -142,17 +142,27 @@ export default {
   gallery: {
     pageTitle: "Our Work",
     pageSubtitle:
-      "Rath building, Dindi Yatra, Payi Yatra & fabrication projects — demo gallery until your photos are added",
+      "Rath building, Dindi Yatra, Payi Yatra & fabrication projects by Shree Keshar Fabrication Works",
     sectionTitle: "Our Work",
     sectionSubtitle:
-      "Rath building, Dindi Yatra, Payi Yatra & fabrication — demo gallery until your photos are added",
+      "Rath building, Dindi Yatra, Payi Yatra & fabrication — crafted with devotion and precision",
     items: [
-      { caption: "Rath Nirman", alt: "Rath under construction" },
-      { caption: "Completed Rath", alt: "Completed temple chariot" },
-      { caption: "Dindi Yatra", alt: "Dindi yatra procession" },
-      { caption: "Fabrication", alt: "Metal fabrication work" },
-      { caption: "Rath Detail", alt: "Rath decoration detail" },
-      { caption: "Payi Yatra", alt: "Payi yatra preparation" },
+      { caption: "Silver Rath with Om Domes", alt: "Large silver rath with three Om-decorated domes" },
+      { caption: "Traditional Temple Rath", alt: "Small traditional rath with single dome and golden spire" },
+      { caption: "Decorated Rath with Curtains", alt: "Ornate rath with red curtains and green carpet" },
+      { caption: "Colorful Dome Rath", alt: "Silver rath with colorful red, yellow and blue domes" },
+      { caption: "Silver Om Rath — Side View", alt: "Silver rath with Om domes side view in green surroundings" },
+      { caption: "Rath Front View with Speakers", alt: "Rath front view with speakers and marigold garlands" },
+      { caption: "Rath Being Prepared", alt: "Rath being prepared at workshop with tractor nearby" },
+      { caption: "Rath with Red Curtains", alt: "Silver rath with red curtains and Om domes" },
+      { caption: "Silver Compact Rath", alt: "Compact silver rath with Om symbols and speakers" },
+      { caption: "Golden Temple Style Rath", alt: "Golden painted rath with temple architecture design" },
+      { caption: "Rath with Marathi Text Board", alt: "Silver rath with red curtains and Marathi devotional text" },
+      { caption: "Decorated Dindi Rath", alt: "Tall rath with red curtains and marigold garlands for dindi" },
+      { caption: "Colorful Dome Rath — Side", alt: "Silver rath with colorful domes and saffron flag" },
+      { caption: "Silver Rath with Red Curtains", alt: "Silver rath with curtains and Om domes at workshop" },
+      { caption: "Premium Silver Rath", alt: "Premium silver rath with dual Om domes and speakers" },
+      { caption: "Rath Ready for Yatra", alt: "Completed silver rath ready for procession" },
     ],
   },
 
@@ -234,7 +244,7 @@ export default {
     getInTouchDesc: "Call or message us for Rath quotes, repairs, or general fabrication work.",
     devotional: "🙏 Vitthal Vitthal · Jai Hari Vitthal",
     demoNote:
-      "Demo contact details — replace with real phone, address & email in siteData.js",
+      "Contact us for Rath quotes, repairs, or custom fabrication work.",
     thankYou: "Thank You!",
     thankYouDesc:
       "Your inquiry has been received. Prabhakar or Harsh Mhaske will contact you shortly.",

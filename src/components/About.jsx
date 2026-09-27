@@ -1,9 +1,11 @@
 import { useTranslation } from "../i18n/LanguageContext"
+import { useAdminData } from "../admin/AdminContext"
 import SectionHeading from "./SectionHeading"
 import ImagePlaceholder from "./ImagePlaceholder"
 
 export default function About({ showHeading = true }) {
   const { t } = useTranslation()
+  const adminData = useAdminData()
   const paragraphs = t("about.paragraphs")
   const stats = t("about.stats")
 
@@ -39,12 +41,20 @@ export default function About({ showHeading = true }) {
           </div>
 
           <div className="space-y-4">
-            <ImagePlaceholder
-              label={t("placeholders.shopLabel")}
-              sublabel={t("placeholders.shopSublabel")}
-              aspect="aspect-[4/3]"
-              variant="gold"
-            />
+            {adminData.shopImage ? (
+              <img
+                src={adminData.shopImage}
+                alt="Workshop"
+                className="aspect-[4/3] w-full rounded-2xl object-cover shadow-sm"
+              />
+            ) : (
+              <ImagePlaceholder
+                label={t("placeholders.shopLabel")}
+                sublabel={t("placeholders.shopSublabel")}
+                aspect="aspect-[4/3]"
+                variant="gold"
+              />
+            )}
             <div className="rounded-xl border border-maroon-800/10 bg-maroon-900 p-5 text-white">
               <p className="font-devanagari text-sm text-gold-400">{t("about.devotional")}</p>
               <p className="mt-2 text-sm leading-relaxed text-white/80">
