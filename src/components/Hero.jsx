@@ -14,8 +14,8 @@ export default function Hero() {
           alt="Shree Keshar Fabrication Works — illuminated Rath for Viththal Yatra"
           className="h-full w-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-rose-900/40 via-red-800/25 to-maroon-950/55" />
-        <div className="pattern-overlay absolute inset-0 opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/5 to-black/60" />
+        <div className="pattern-overlay absolute inset-0 opacity-10" />
       </div>
 
       <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-4 pb-20 pt-32 sm:px-6">
