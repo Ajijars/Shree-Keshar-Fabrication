@@ -14,54 +14,74 @@ export default function AdminGallery() {
   const [uploadForm, setUploadForm] = useState({
     captionEn: "",
     captionMr: "",
-    file: null,
-    preview: null,
+    files: [],
+    previews: [],
     urlPath: "",
     uploadType: "file", // "file" or "url"
   })
 
-  const handleFileSelect = (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+  const handleFileSelect = async (e) => {
+    const files = Array.from(e.target.files || [])
+    if (files.length === 0) return
 
-    // Check file size (max 2MB for localStorage)
-    if (file.size > 2 * 1024 * 1024) {
-      alert("फाइल खूप मोठी आहे! 2MB पेक्षा कमी वापरा.\nFile too large! Use less than 2MB.")
+    // Check total size to prevent localStorage quota issues
+    const totalSize = files.reduce((acc, file) => acc + file.size, 0)
+    if (totalSize > 4 * 1024 * 1024) {
+      alert("एकूण फाइल्स खूप मोठ्या आहेत! (Max 4MB total)\nTotal file size is too large! Please select fewer or smaller files.")
       return
     }
 
-    const reader = new FileReader()
-    reader.onload = (ev) => {
-      setUploadForm((prev) => ({
-        ...prev,
-        file,
-        preview: ev.target.result,
-      }))
-    }
-    reader.readAsDataURL(file)
+    const readAsDataURL = (file) =>
+      new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onload = (ev) => resolve(ev.target.result)
+        reader.readAsDataURL(file)
+      })
+
+    const results = await Promise.all(files.map(readAsDataURL))
+
+    setUploadForm((prev) => ({
+      ...prev,
+      files,
+      previews: results,
+    }))
   }
 
   const handleUpload = () => {
-    const src = uploadForm.uploadType === "file" ? uploadForm.preview : uploadForm.urlPath
+    if (uploadForm.uploadType === "file") {
+      if (!uploadForm.previews || uploadForm.previews.length === 0) {
+        alert("फोटो निवडा\nSelect photos")
+        return
+      }
 
-    if (!src) {
-      alert("फोटो निवडा किंवा path टाका\nSelect a photo or enter path")
-      return
+      uploadForm.previews.forEach((src) => {
+        addGalleryImage({
+          src,
+          captionEn: uploadForm.captionEn || "New Photo",
+          captionMr: uploadForm.captionMr || "नवीन फोटो",
+          altEn: uploadForm.captionEn || "Gallery photo",
+          altMr: uploadForm.captionMr || "गॅलरी फोटो",
+        })
+      })
+    } else {
+      if (!uploadForm.urlPath) {
+        alert("Path टाका\nEnter path")
+        return
+      }
+      addGalleryImage({
+        src: uploadForm.urlPath,
+        captionEn: uploadForm.captionEn || "New Photo",
+        captionMr: uploadForm.captionMr || "नवीन फोटो",
+        altEn: uploadForm.captionEn || "Gallery photo",
+        altMr: uploadForm.captionMr || "गॅलरी फोटो",
+      })
     }
-
-    addGalleryImage({
-      src,
-      captionEn: uploadForm.captionEn || "Rath Work",
-      captionMr: uploadForm.captionMr || "रथ काम",
-      altEn: uploadForm.captionEn || "Rath fabrication work",
-      altMr: uploadForm.captionMr || "रथ फॅब्रिकेशन काम",
-    })
 
     setUploadForm({
       captionEn: "",
       captionMr: "",
-      file: null,
-      preview: null,
+      files: [],
+      previews: [],
       urlPath: "",
       uploadType: "file",
     })
@@ -166,22 +186,31 @@ export default function AdminGallery() {
 
             {uploadForm.uploadType === "file" ? (
               <div>
-                {uploadForm.preview ? (
-                  <div className="relative mb-4 overflow-hidden rounded-xl">
-                    <img
-                      src={uploadForm.preview}
-                      alt="Preview"
-                      className="h-48 w-full object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setUploadForm((p) => ({ ...p, file: null, preview: null }))
-                      }
-                      className="absolute right-2 top-2 rounded-full bg-black/50 p-1.5 text-white hover:bg-black/70"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
+                {uploadForm.previews && uploadForm.previews.length > 0 ? (
+                  <div className="mb-4">
+                    <div className="mb-2 grid max-h-48 grid-cols-3 gap-2 overflow-y-auto">
+                      {uploadForm.previews.map((preview, idx) => (
+                        <div key={idx} className="relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 aspect-square">
+                          <img
+                            src={preview}
+                            alt={`Preview ${idx + 1}`}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <span>{uploadForm.previews.length} फोटो निवडले (photos selected)</span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setUploadForm((p) => ({ ...p, files: [], previews: [] }))
+                        }
+                        className="font-medium text-red-500 hover:underline"
+                      >
+                        सर्व काढा (Clear All)
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <button
@@ -191,15 +220,16 @@ export default function AdminGallery() {
                   >
                     <ImageIcon className="mb-2 h-10 w-10" />
                     <p className="font-devanagari text-sm font-medium">
-                      फोटो निवडण्यासाठी क्लिक करा
+                      फोटो निवडण्यासाठी क्लिक करा (एकापेक्षा जास्त निवडू शकता)
                     </p>
-                    <p className="text-xs">Click to select photo (max 2MB)</p>
+                    <p className="text-xs">Click to select photos (Multiple allowed, max 4MB total)</p>
                   </button>
                 )}
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
+                  multiple
                   onChange={handleFileSelect}
                   className="hidden"
                 />
@@ -225,11 +255,17 @@ export default function AdminGallery() {
             )}
 
             {/* Captions */}
-            <div className="mb-4 grid gap-3 sm:grid-cols-2">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                  मराठी नाव <span className="text-xs text-gray-400">(Marathi caption)</span>
-                </label>
+            <div className="mb-4">
+              <div className="mb-3 rounded-xl bg-blue-50 p-3 text-sm text-blue-700">
+                <span className="font-devanagari font-medium">💡 टीप:</span> फोटो अपलोड केल्यानंतर तुम्ही गॅलरीमध्ये प्रत्येकाचे नाव सहज बदलू शकता.
+                <br />
+                <span className="text-xs">(You can easily rename each photo later in the gallery grid.)</span>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                    मराठी नाव <span className="text-xs text-gray-400">(Default Marathi)</span>
+                  </label>
                 <input
                   type="text"
                   value={uploadForm.captionMr}
@@ -242,7 +278,7 @@ export default function AdminGallery() {
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-gray-700">
-                  English Name <span className="text-xs text-gray-400">(English caption)</span>
+                  English Name <span className="text-xs text-gray-400">(Default English)</span>
                 </label>
                 <input
                   type="text"
