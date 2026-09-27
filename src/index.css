@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --color-maroon-950: #ef4444; /* Tailwind red-500 (was 900) */
-  --color-maroon-900: #dc2626; /* Tailwind red-600 (was 800) */
-  --color-maroon-800: #ef4444; /* Tailwind red-500 (was 700) */
-  --color-maroon-700: #f87171; /* Tailwind red-400 (was 600) */
+  --color-maroon-950: #172554; /* Tailwind blue-950 */
+  --color-maroon-900: #1e3a8a; /* Tailwind blue-900 */
+  --color-maroon-800: #1e40af; /* Tailwind blue-800 */
+  --color-maroon-700: #1d4ed8; /* Tailwind blue-700 */
   --color-saffron-500: #ff9933;
   --color-saffron-400: #ffb366;
   --color-gold-500: #d4af37;
