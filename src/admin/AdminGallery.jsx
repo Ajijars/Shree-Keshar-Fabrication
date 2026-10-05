@@ -291,6 +291,7 @@ export default function AdminGallery() {
                 />
               </div>
             </div>
+            </div>
 
             {/* Actions */}
             <div className="flex gap-3">
