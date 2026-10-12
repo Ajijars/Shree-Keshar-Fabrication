@@ -9,10 +9,9 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const { pathname } = useLocation()
   const { t } = useTranslation()
-  const isHome = pathname === "/"
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener("scroll", onScroll)
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
@@ -21,40 +20,40 @@ export default function Navbar() {
     setOpen(false)
   }, [pathname])
 
-  const solidNav = !isHome || scrolled
-
   const linkClass = ({ isActive }) =>
-    `rounded-lg px-3 py-2 text-sm font-medium transition ${
+    `rounded-xl px-3.5 py-2 text-sm font-medium transition ${
       isActive
-        ? "bg-white/15 text-gold-400"
-        : "text-white/85 hover:bg-white/10 hover:text-gold-400"
+        ? "bg-amber-50/90 text-amber-800 font-semibold shadow-2xs border border-amber-200/50"
+        : "text-slate-700 hover:bg-slate-100/80 hover:text-amber-700"
     }`
 
   const mobileLinkClass = ({ isActive }) =>
-    `block rounded-lg px-3 py-3 text-sm font-medium transition ${
-      isActive ? "bg-white/10 text-gold-400" : "text-white/90 hover:bg-white/10"
+    `block rounded-xl px-4 py-3 text-sm font-medium transition ${
+      isActive ? "bg-amber-50 text-amber-800 font-semibold border border-amber-200/40" : "text-slate-700 hover:bg-slate-100"
     }`
 
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        solidNav ? "bg-maroon-950/95 shadow-lg backdrop-blur-md" : "bg-transparent"
+        scrolled
+          ? "bg-white/98 shadow-md border-b border-slate-200/90 backdrop-blur-md"
+          : "bg-white/95 shadow-xs border-b border-slate-200/80 backdrop-blur-md"
       }`}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
         <Link to="/" className="group flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-gold-500/50 bg-gold-500/10 transition group-hover:bg-gold-500/20">
-            <span className="font-display text-lg font-bold text-gold-400">SK</span>
+          <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-amber-500/60 bg-gradient-to-br from-amber-50 to-amber-100/60 shadow-xs transition group-hover:scale-105 group-hover:border-amber-600">
+            <span className="font-display text-lg font-bold text-amber-800">SK</span>
           </div>
-          <div className="hidden sm:block">
-            <p className="font-display text-sm font-semibold leading-tight text-white">
+          <div>
+            <p className="font-display text-base font-bold leading-tight text-slate-900 group-hover:text-amber-800 transition">
               {t("business.shortName")}
             </p>
-            <p className="text-xs text-gold-400/80">{t("business.tagline")}</p>
+            <p className="font-devanagari text-xs font-medium text-amber-700/90">{t("business.tagline")}</p>
           </div>
         </Link>
 
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-1.5 lg:flex">
           {navRoutes.map((link) => (
             <li key={link.path}>
               <NavLink to={link.path} end={link.path === "/"} className={linkClass}>
@@ -62,13 +61,13 @@ export default function Navbar() {
               </NavLink>
             </li>
           ))}
-          <li>
+          <li className="ml-2">
             <LanguageSwitcher />
           </li>
-          <li>
+          <li className="ml-2">
             <Link
               to="/contact"
-              className="ml-1 inline-flex items-center gap-2 rounded-full bg-saffron-500 px-5 py-2 text-sm font-semibold text-maroon-950 transition hover:bg-saffron-400"
+              className="inline-flex items-center gap-2 rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-slate-950 shadow-xs transition hover:bg-amber-400 hover:shadow"
             >
               <Phone className="h-4 w-4" />
               {t("nav.getQuote")}
@@ -80,7 +79,7 @@ export default function Navbar() {
           <LanguageSwitcher compact />
           <button
             type="button"
-            className="rounded-lg p-2 text-white"
+            className="rounded-lg p-2 text-slate-700 hover:bg-slate-100 transition"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
@@ -90,8 +89,8 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div className="border-t border-white/10 bg-maroon-950/98 px-4 py-4 lg:hidden">
-          <ul className="flex flex-col gap-1">
+        <div className="border-t border-slate-200/80 bg-white/98 px-4 py-4 shadow-lg lg:hidden">
+          <ul className="flex flex-col gap-1.5">
             {navRoutes.map((link) => (
               <li key={link.path}>
                 <NavLink to={link.path} end={link.path === "/"} className={mobileLinkClass}>
@@ -99,10 +98,10 @@ export default function Navbar() {
                 </NavLink>
               </li>
             ))}
-            <li>
+            <li className="pt-2">
               <Link
                 to="/contact"
-                className="mt-2 block rounded-full bg-saffron-500 px-5 py-3 text-center text-sm font-semibold text-maroon-950"
+                className="block rounded-xl bg-amber-500 px-5 py-3 text-center text-sm font-semibold text-slate-950 shadow-sm"
               >
                 {t("nav.getQuote")}
               </Link>

@@ -9,19 +9,22 @@ export default function AdminLogin() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError("")
 
-    setTimeout(() => {
-      const success = login(password)
-      if (!success) {
-        setError("चुकीचा पासवर्ड / Wrong password")
+    try {
+      const res = await login(password)
+      if (!res.success) {
+        setError(res.error || "चुकीचा पासवर्ड / Wrong password")
         setPassword("")
       }
+    } catch {
+      setError("लॉगिन अयशस्वी. कृपया पुन्हा प्रयत्न करा. / Login failed.")
+    } finally {
       setLoading(false)
-    }, 500)
+    }
   }
 
   return (

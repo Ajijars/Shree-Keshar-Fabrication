@@ -1,12 +1,19 @@
 import { useState } from "react"
-import { RotateCcw, AlertTriangle } from "lucide-react"
+import { RotateCcw, AlertTriangle, Key, Lock, Check } from "lucide-react"
 import { useAdmin } from "./AdminContext"
 import PageIndicator from "./PageIndicator"
 import toast from "react-hot-toast"
 
 export default function AdminSettings() {
-  const { data, updateSocial, resetToDefaults } = useAdmin()
+  const { data, updateSocial, resetToDefaults, changePassword } = useAdmin()
   const [showReset, setShowReset] = useState(false)
+
+  // Password state
+  const [currentPassword, setCurrentPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [passwordLoading, setPasswordLoading] = useState(false)
+  const [passwordError, setPasswordError] = useState("")
 
   const handleSave = () => {
     toast.success("सेटिंग्स जतन केल्या! (Settings Saved!)")
@@ -22,6 +29,41 @@ export default function AdminSettings() {
     toast.success("सर्व सेटिंग्स पूर्ववत केल्या! (Reset successfully)")
   }
 
+  const handlePasswordChange = async (e) => {
+    e.preventDefault()
+    setPasswordError("")
+
+    if (!currentPassword) {
+      setPasswordError("कृपया सध्याचा पासवर्ड टाका / Enter current password")
+      return
+    }
+    if (newPassword.length < 6) {
+      setPasswordError("नवीन पासवर्ड किमान ६ अक्षरांचा असावा / Minimum 6 characters")
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError("दोन्ही नवीन पासवर्ड जुळत नाहीत / Passwords do not match")
+      return
+    }
+
+    setPasswordLoading(true)
+    try {
+      const res = await changePassword(currentPassword, newPassword)
+      if (res.success) {
+        toast.success(res.message || "पासवर्ड यशस्वीरित्या बदलला! (Password updated!)")
+        setCurrentPassword("")
+        setNewPassword("")
+        setConfirmPassword("")
+      } else {
+        setPasswordError(res.error || "पासवर्ड बदलण्यात त्रुटी / Failed to update")
+      }
+    } catch {
+      setPasswordError("तांत्रिक त्रुटी. पुन्हा प्रयत्न करा. / Network error")
+    } finally {
+      setPasswordLoading(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -30,7 +72,7 @@ export default function AdminSettings() {
           <h1 className="font-devanagari text-2xl font-bold text-gray-800">
             सेटिंग्स
           </h1>
-          <p className="text-sm text-gray-400">Settings — Social media links & other settings</p>
+          <p className="text-sm text-gray-400">Settings — Social media links, admin security & configuration</p>
         </div>
       </div>
 
@@ -92,32 +134,80 @@ export default function AdminSettings() {
         </div>
       </div>
 
-      {/* Admin Info */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6">
-        <h2 className="font-devanagari mb-4 text-lg font-semibold text-maroon-900">
-          🔑 Admin माहिती
-          <span className="ml-2 text-sm font-normal text-gray-400">(Admin Info)</span>
-        </h2>
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-          <p className="font-devanagari text-sm text-amber-800">
-            <strong>Admin URL:</strong>{" "}
-            <code className="rounded bg-amber-100 px-2 py-0.5 text-amber-900">
-              /admin
-            </code>
-          </p>
-          <p className="font-devanagari mt-2 text-sm text-amber-800">
-            <strong>पासवर्ड:</strong>{" "}
-            <code className="rounded bg-amber-100 px-2 py-0.5 text-amber-900">
-              keshar2024
-            </code>
-          </p>
-          <p className="font-devanagari mt-2 text-xs text-amber-600">
-            पासवर्ड बदलण्यासाठी डेव्हलपरशी संपर्क करा.
-          </p>
-          <p className="text-xs text-amber-600">
-            Contact developer to change the password.
-          </p>
+      {/* Admin Security & Password Change */}
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xs">
+        <div className="flex items-center gap-2 mb-4">
+          <Key className="h-5 w-5 text-amber-600" />
+          <h2 className="font-devanagari text-lg font-semibold text-gray-900">
+            🔐 Admin पासवर्ड बदला
+            <span className="ml-2 text-sm font-normal text-gray-400">(Change Admin Password)</span>
+          </h2>
         </div>
+        <p className="text-sm text-gray-500 mb-6 font-devanagari">
+          सुरक्षिततेसाठी नवीन पासवर्ड सेट करा. पासवर्ड AWS DynamoDB मध्ये एन्क्रिप्टेड (PBKDF2 SHA-512) साठवला जातो.
+        </p>
+
+        <form onSubmit={handlePasswordChange} className="space-y-4 max-w-xl">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              सध्याचा पासवर्ड (Current Password)
+            </label>
+            <div className="relative">
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="सध्याचा पासवर्ड टाका"
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none transition focus:border-maroon-800 focus:ring-2 focus:ring-maroon-800/20"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                नवीन पासवर्ड (New Password)
+              </label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="किमान ६ अक्षरे"
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none transition focus:border-maroon-800 focus:ring-2 focus:ring-maroon-800/20"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                नवीन पासवर्ड पुन्हा टाका (Confirm)
+              </label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="नवीन पासवर्ड पुन्हा टाका"
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none transition focus:border-maroon-800 focus:ring-2 focus:ring-maroon-800/20"
+                required
+              />
+            </div>
+          </div>
+
+          {passwordError && (
+            <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+              {passwordError}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={passwordLoading}
+            className="inline-flex items-center gap-2 rounded-xl bg-maroon-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-maroon-800 disabled:opacity-50"
+          >
+            <Lock className="h-4 w-4" />
+            <span>{passwordLoading ? "अपडेट करत आहे..." : "नवीन पासवर्ड जतन करा (Save Password)"}</span>
+          </button>
+        </form>
       </div>
 
       {/* Danger Zone */}

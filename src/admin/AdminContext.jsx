@@ -4,12 +4,13 @@ const AdminContext = createContext(null)
 
 const STORAGE_KEY = "sk-admin-data"
 const AUTH_KEY = "sk-admin-auth"
+const KEY_STORAGE = "sk-admin-key"
 
 // Live AWS API Gateway Endpoint
 const API_BASE = "https://9n5fxaqqel.execute-api.ap-southeast-2.amazonaws.com"
 
-// Default admin password
-const ADMIN_PASSWORD = "keshar2024"
+// Default fallback admin password
+const DEFAULT_ADMIN_PASSWORD = "keshar2024"
 
 const defaultData = {
   gallery: [],
@@ -116,6 +117,10 @@ export function AdminProvider({ children }) {
   })
   const isInitialMount = useRef(true)
 
+  const getAdminKey = useCallback(() => {
+    return sessionStorage.getItem(KEY_STORAGE) || DEFAULT_ADMIN_PASSWORD
+  }, [])
+
   // Fetch live data from AWS on mount
   useEffect(() => {
     let isMounted = true
@@ -160,7 +165,7 @@ export function AdminProvider({ children }) {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "x-admin-key": ADMIN_PASSWORD,
+              "x-admin-key": getAdminKey(),
             },
             body: JSON.stringify({ data }),
           })
@@ -171,20 +176,62 @@ export function AdminProvider({ children }) {
 
       return () => clearTimeout(timeout)
     }
-  }, [data, isAuthenticated])
+  }, [data, isAuthenticated, getAdminKey])
 
-  const login = useCallback((password) => {
-    if (password === ADMIN_PASSWORD) {
-      setIsAuthenticated(true)
-      sessionStorage.setItem(AUTH_KEY, "true")
-      return true
+  // Secure login via AWS Lambda PBKDF2 authentication
+  const login = useCallback(async (password) => {
+    try {
+      const res = await fetch(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "login", password }),
+      })
+      if (res.ok) {
+        setIsAuthenticated(true)
+        sessionStorage.setItem(AUTH_KEY, "true")
+        sessionStorage.setItem(KEY_STORAGE, password)
+        return { success: true }
+      }
+      return { success: false, error: "चुकीचा पासवर्ड / Wrong password" }
+    } catch {
+      // Local fallback for offline mode
+      if (password === DEFAULT_ADMIN_PASSWORD) {
+        setIsAuthenticated(true)
+        sessionStorage.setItem(AUTH_KEY, "true")
+        sessionStorage.setItem(KEY_STORAGE, password)
+        return { success: true }
+      }
+      return { success: false, error: "Network error. Please try again." }
     }
-    return false
+  }, [])
+
+  // Secure change password via AWS Lambda
+  const changePassword = useCallback(async (currentPassword, newPassword) => {
+    try {
+      const res = await fetch(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "change-password",
+          currentPassword,
+          newPassword,
+        }),
+      })
+      const json = await res.json()
+      if (res.ok) {
+        sessionStorage.setItem(KEY_STORAGE, newPassword)
+        return { success: true, message: "पासवर्ड यशस्वीरित्या बदलला! (Password updated!)" }
+      }
+      return { success: false, error: json.error || "Failed to change password" }
+    } catch (err) {
+      return { success: false, error: err.message || "Network error" }
+    }
   }, [])
 
   const logout = useCallback(() => {
     setIsAuthenticated(false)
     sessionStorage.removeItem(AUTH_KEY)
+    sessionStorage.removeItem(KEY_STORAGE)
   }, [])
 
   // Universal S3 image uploader (converts base64 to permanent S3 URL)
@@ -197,7 +244,7 @@ export function AdminProvider({ children }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-admin-key": ADMIN_PASSWORD,
+          "x-admin-key": getAdminKey(),
         },
         body: JSON.stringify({
           action: "upload",
@@ -217,7 +264,7 @@ export function AdminProvider({ children }) {
       console.warn("S3 upload failed, keeping original:", uploadErr)
     }
     return base64Data
-  }, [])
+  }, [getAdminKey])
 
   // Gallery operations: Uploads image to AWS S3 & adds to gallery state
   const addGalleryImage = useCallback(async (imageData) => {
@@ -359,6 +406,7 @@ export function AdminProvider({ children }) {
         data,
         isAuthenticated,
         login,
+        changePassword,
         logout,
         uploadImage,
         addGalleryImage,

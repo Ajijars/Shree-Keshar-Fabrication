@@ -22,7 +22,7 @@ export default function About({ showHeading = true }) {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div className="space-y-5">
             {paragraphs.map((p, i) => (
-              <p key={i} className="leading-relaxed text-gray-700">
+              <p key={i} className="font-devanagari text-base leading-relaxed text-slate-700">
                 {p}
               </p>
             ))}
@@ -31,10 +31,10 @@ export default function About({ showHeading = true }) {
               {stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-xl border border-gold-500/20 bg-white p-4 text-center shadow-sm"
+                  className="rounded-2xl border border-amber-200/60 bg-white p-4 text-center shadow-xs transition hover:shadow-sm"
                 >
-                  <p className="font-display text-2xl font-bold text-maroon-800">{stat.value}</p>
-                  <p className="mt-1 text-xs text-gray-500">{stat.label}</p>
+                  <p className="font-display text-2xl font-bold text-amber-700">{stat.value}</p>
+                  <p className="font-devanagari mt-1 text-xs text-slate-500">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -45,7 +45,7 @@ export default function About({ showHeading = true }) {
               <img
                 src={adminData.shopImage}
                 alt="Workshop"
-                className="aspect-[4/3] w-full rounded-2xl object-cover shadow-sm"
+                className="aspect-[4/3] w-full rounded-2xl object-cover shadow-md"
               />
             ) : (
               <ImagePlaceholder
@@ -55,9 +55,9 @@ export default function About({ showHeading = true }) {
                 variant="gold"
               />
             )}
-            <div className="rounded-xl border border-maroon-800/10 bg-maroon-900 p-5 text-white">
-              <p className="font-devanagari text-sm text-gold-400">{t("about.devotional")}</p>
-              <p className="mt-2 text-sm leading-relaxed text-white/80">
+            <div className="rounded-2xl border border-amber-300/80 bg-gradient-to-br from-amber-50 via-amber-100/30 to-amber-50 p-6 shadow-xs">
+              <p className="font-devanagari text-sm font-bold text-amber-800">✨ {t("about.devotional")}</p>
+              <p className="font-devanagari mt-2 text-sm leading-relaxed text-slate-700">
                 {t("about.devotionalText")}
               </p>
             </div>
