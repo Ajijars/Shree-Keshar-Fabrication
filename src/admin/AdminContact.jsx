@@ -1,15 +1,12 @@
-import { useState } from "react"
-import { Save, Check } from "lucide-react"
 import { useAdmin } from "./AdminContext"
 import PageIndicator from "./PageIndicator"
+import toast from "react-hot-toast"
 
 export default function AdminContact() {
   const { data, updateContact, updateOwner } = useAdmin()
-  const [saved, setSaved] = useState(false)
 
   const handleSave = () => {
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+    toast.success("संपर्क माहिती जतन केली! (Contact info saved!)")
   }
 
   const handleContactChange = (field, value) => {
@@ -30,11 +27,6 @@ export default function AdminContact() {
           </h1>
           <p className="text-sm text-gray-400">Contact Info — Update phone numbers, address, email</p>
         </div>
-        {saved && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
-            <Check className="h-4 w-4" /> जतन झाले! (Saved!)
-          </span>
-        )}
       </div>
 
       {/* Where changes appear */}

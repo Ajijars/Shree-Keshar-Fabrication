@@ -1,16 +1,15 @@
 import { useState } from "react"
-import { Check, RotateCcw, AlertTriangle } from "lucide-react"
+import { RotateCcw, AlertTriangle } from "lucide-react"
 import { useAdmin } from "./AdminContext"
 import PageIndicator from "./PageIndicator"
+import toast from "react-hot-toast"
 
 export default function AdminSettings() {
   const { data, updateSocial, resetToDefaults } = useAdmin()
-  const [saved, setSaved] = useState(false)
   const [showReset, setShowReset] = useState(false)
 
   const handleSave = () => {
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+    toast.success("सेटिंग्स जतन केल्या! (Settings Saved!)")
   }
 
   const handleSocialChange = (field, value) => {
@@ -20,6 +19,7 @@ export default function AdminSettings() {
   const handleReset = () => {
     resetToDefaults()
     setShowReset(false)
+    toast.success("सर्व सेटिंग्स पूर्ववत केल्या! (Reset successfully)")
   }
 
   return (
@@ -32,11 +32,6 @@ export default function AdminSettings() {
           </h1>
           <p className="text-sm text-gray-400">Settings — Social media links & other settings</p>
         </div>
-        {saved && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
-            <Check className="h-4 w-4" /> जतन झाले! (Saved!)
-          </span>
-        )}
       </div>
 
       {/* Where changes appear */}

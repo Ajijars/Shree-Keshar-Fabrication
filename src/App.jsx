@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { Toaster } from "react-hot-toast"
+import { HelmetProvider } from "react-helmet-async"
 import Layout from "./components/Layout"
 import HomePage from "./pages/HomePage"
 import AboutPage from "./pages/AboutPage"
@@ -19,30 +21,33 @@ import AdminSettings from "./admin/AdminSettings"
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public Site */}
-        <Route element={<Layout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/owners" element={<OwnersPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-        </Route>
-
-        {/* Admin Panel */}
-        <Route path="/admin" element={<AdminGuard />}>
-          <Route element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="gallery" element={<AdminGallery />} />
-            <Route path="services" element={<AdminServices />} />
-            <Route path="owners" element={<AdminOwners />} />
-            <Route path="contact" element={<AdminContact />} />
-            <Route path="settings" element={<AdminSettings />} />
+    <HelmetProvider>
+      <BrowserRouter>
+        <Toaster position="top-right" />
+        <Routes>
+          {/* Public Site */}
+          <Route element={<Layout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/owners" element={<OwnersPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+
+          {/* Admin Panel */}
+          <Route path="/admin" element={<AdminGuard />}>
+            <Route element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="gallery" element={<AdminGallery />} />
+              <Route path="services" element={<AdminServices />} />
+              <Route path="owners" element={<AdminOwners />} />
+              <Route path="contact" element={<AdminContact />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   )
 }

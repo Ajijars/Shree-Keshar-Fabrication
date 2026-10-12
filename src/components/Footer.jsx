@@ -57,7 +57,7 @@ export default function Footer() {
               <ul className="mt-4 space-y-3 text-sm text-white/60">
                 <li className="flex items-start gap-2">
                   <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
-                  <span>{phone2}</span>
+                  <span>{phone1}{phone2 && phone2 !== phone1 ? ` / ${phone2}` : ""}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Mail className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />

@@ -1,13 +1,13 @@
 import { useState, useRef } from "react"
-import { Plus, Trash2, Save, IndianRupee, Edit3, Check, X, ImageIcon } from "lucide-react"
+import { Plus, Trash2, IndianRupee, Edit3, Check, X, ImageIcon } from "lucide-react"
 import { useAdmin } from "./AdminContext"
 import PageIndicator from "./PageIndicator"
+import toast from "react-hot-toast"
 
 export default function AdminServices() {
   const { data, updateService, addService, removeService } = useAdmin()
   const [editingId, setEditingId] = useState(null)
   const [showAdd, setShowAdd] = useState(false)
-  const [saved, setSaved] = useState(false)
   const serviceFileRef = useRef(null)
   const [uploadingServiceId, setUploadingServiceId] = useState(null)
   const [newService, setNewService] = useState({
@@ -22,8 +22,7 @@ export default function AdminServices() {
 
   const handleSave = (id, field, value) => {
     updateService(id, { [field]: value })
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+    toast.success("बदल जतन केले! (Changes saved!)")
   }
 
   const handleAddService = () => {
@@ -53,11 +52,6 @@ export default function AdminServices() {
           <p className="text-sm text-gray-400">Services & Pricing — Update service details and rates</p>
         </div>
         <div className="flex items-center gap-3">
-          {saved && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-              <Check className="h-3 w-3" /> जतन झाले (Saved)
-            </span>
-          )}
           <button
             type="button"
             onClick={() => setShowAdd(true)}

@@ -2,6 +2,7 @@ import { useState, useRef } from "react"
 import { Plus, Trash2, GripVertical, ImageIcon, X, Check, Edit3 } from "lucide-react"
 import { useAdmin } from "./AdminContext"
 import PageIndicator from "./PageIndicator"
+import toast from "react-hot-toast"
 
 export default function AdminGallery() {
   const { data, addGalleryImage, removeGalleryImage, updateGalleryImage, reorderGallery } = useAdmin()
@@ -86,11 +87,13 @@ export default function AdminGallery() {
       uploadType: "file",
     })
     setShowUpload(false)
+    toast.success("फोटो जोडला! (Photo added!)")
   }
 
   const handleDelete = (id) => {
     if (window.confirm("हा फोटो हटवायचा आहे का?\nDelete this photo?")) {
       removeGalleryImage(id)
+      toast.success("फोटो हटवला! (Photo deleted!)")
     }
   }
 

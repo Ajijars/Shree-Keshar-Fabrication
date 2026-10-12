@@ -18,7 +18,9 @@ export default function ContactForm({ showHeading = true }) {
   const { t } = useTranslation()
   const [form, setForm] = useState(initialForm)
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
+  const [submitError, setSubmitError] = useState("")
 
   const cityOptions = t("contact.cityOptions")
   const serviceOptions = t("contact.serviceOptions")
@@ -42,15 +44,45 @@ export default function ContactForm({ showHeading = true }) {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const next = validate()
     if (Object.keys(next).length) {
       setErrors(next)
       return
     }
-    setSubmitted(true)
-    setForm(initialForm)
+
+    setIsSubmitting(true)
+    setSubmitError("")
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          // Replace this with your actual Web3Forms access key
+          access_key: "YOUR_WEB3FORMS_ACCESS_KEY_HERE",
+          subject: `New Lead from ${form.name} - Shree Keshar Fabrication`,
+          from_name: form.name,
+          ...form
+        }),
+      })
+
+      const result = await response.json()
+      if (result.success) {
+        setSubmitted(true)
+        setForm(initialForm)
+      } else {
+        setSubmitError(t("contact.errors.submissionFailed") || "Something went wrong. Please try again.")
+      }
+    } catch (err) {
+      setSubmitError(t("contact.errors.submissionFailed") || "Something went wrong. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const contactMethods = [
@@ -274,12 +306,19 @@ export default function ContactForm({ showHeading = true }) {
                   </div>
                 </div>
 
+                {submitError && (
+                  <div className="mb-4 rounded-xl bg-red-50 p-4 text-sm text-red-600 border border-red-100">
+                    {submitError}
+                  </div>
+                )}
+                
                 <button
                   type="submit"
-                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon-900 py-3.5 text-sm font-semibold text-white transition hover:bg-maroon-800 sm:w-auto sm:px-10"
+                  disabled={isSubmitting}
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon-900 py-3.5 text-sm font-semibold text-white transition hover:bg-maroon-800 disabled:opacity-70 disabled:cursor-not-allowed sm:w-auto sm:px-10"
                 >
-                  <Send className="h-4 w-4" />
-                  {t("common.submit")}
+                  <Send className={`h-4 w-4 ${isSubmitting ? "animate-pulse" : ""}`} />
+                  {isSubmitting ? t("common.loading") || "Sending..." : t("common.submit")}
                 </button>
               </form>
             )}
