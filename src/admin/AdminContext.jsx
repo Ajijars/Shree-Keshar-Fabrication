@@ -254,6 +254,28 @@ export function AdminProvider({ children }) {
     }
   }, [])
 
+  // Secure password reset using Master Recovery PIN via AWS Lambda
+  const resetPasswordWithPin = useCallback(async (recoveryPin, newPassword) => {
+    try {
+      const res = await fetch(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "reset-with-pin",
+          recoveryPin,
+          newPassword,
+        }),
+      })
+      const json = await res.json()
+      if (res.ok) {
+        return { success: true, message: json.message || "पासवर्ड रीसेट झाला! (Password reset successfully)" }
+      }
+      return { success: false, error: json.error || "रिकव्हरी पिन चुकीचा आहे / Failed to reset password" }
+    } catch {
+      return { success: false, error: "सर्व्हरशी संपर्क होऊ शकला नाही. / Network error." }
+    }
+  }, [])
+
   // Universal S3 image uploader (converts base64 to permanent S3 URL)
   const uploadImage = useCallback(async (base64Data, filename = `img_${Date.now()}.jpg`) => {
     if (!base64Data || typeof base64Data !== "string" || !base64Data.startsWith("data:image")) {
@@ -427,6 +449,7 @@ export function AdminProvider({ children }) {
         isAuthenticated,
         login,
         changePassword,
+        resetPasswordWithPin,
         logout,
         uploadImage,
         addGalleryImage,

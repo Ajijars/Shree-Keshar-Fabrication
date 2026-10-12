@@ -7,6 +7,7 @@ const REGION = process.env.AWS_REGION || "ap-southeast-2";
 const TABLE_NAME = process.env.TABLE_NAME || "AdminData";
 const BUCKET_NAME = process.env.BUCKET_NAME || "shree-keshar-fabrication-gallery";
 const DEFAULT_PASSWORD = process.env.ADMIN_PASSWORD || "keshar2024";
+const DEFAULT_RECOVERY_PIN = process.env.RECOVERY_PIN || "969937";
 
 const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({ region: REGION }));
 const s3 = new S3Client({ region: REGION });
@@ -47,7 +48,12 @@ async function getStoredCredentials() {
       Key: { id: "auth_config" }
     }));
     if (res.Item?.hash && res.Item?.salt) {
-      return { salt: res.Item.salt, hash: res.Item.hash, iterations: res.Item.iterations || 100000 };
+      return {
+        salt: res.Item.salt,
+        hash: res.Item.hash,
+        recoveryPin: res.Item.recoveryPin || DEFAULT_RECOVERY_PIN,
+        iterations: res.Item.iterations || 100000
+      };
     }
   } catch (err) {
     console.warn("Could not fetch auth_config from DynamoDB:", err);
@@ -58,6 +64,7 @@ async function getStoredCredentials() {
   return {
     salt: defaultSalt,
     hash: hashPassword(DEFAULT_PASSWORD, defaultSalt),
+    recoveryPin: DEFAULT_RECOVERY_PIN,
     iterations: 100000
   };
 }
@@ -168,6 +175,9 @@ export const handler = async (event) => {
         };
       }
 
+      const stored = await getStoredCredentials();
+      const updatedPin = body.newRecoveryPin || stored.recoveryPin || DEFAULT_RECOVERY_PIN;
+
       const newSalt = crypto.randomBytes(32).toString("hex");
       const newHash = hashPassword(body.newPassword, newSalt);
 
@@ -177,6 +187,7 @@ export const handler = async (event) => {
           id: "auth_config",
           salt: newSalt,
           hash: newHash,
+          recoveryPin: updatedPin,
           iterations: 100000,
           updatedAt: new Date().toISOString()
         }
@@ -189,7 +200,51 @@ export const handler = async (event) => {
       };
     }
 
-    // 4. VERIFY AUTH FOR ALL OTHER POST ACTIONS (/upload, /data)
+    // 4. POST /reset-with-pin (Self-service Password Reset via Master Recovery PIN)
+    if (rawPath.includes("/reset-with-pin") || body.action === "reset-with-pin") {
+      const stored = await getStoredCredentials();
+      const validPin = stored.recoveryPin || DEFAULT_RECOVERY_PIN;
+
+      if (!body.recoveryPin || String(body.recoveryPin).trim() !== String(validPin).trim()) {
+        await new Promise((resolve) => setTimeout(resolve, 800));
+        return {
+          statusCode: 401,
+          headers: corsHeaders,
+          body: JSON.stringify({ error: "चुकीचा रिकव्हरी पिन / Invalid Recovery PIN" })
+        };
+      }
+
+      if (!body.newPassword || typeof body.newPassword !== "string" || body.newPassword.length < 8) {
+        return {
+          statusCode: 400,
+          headers: corsHeaders,
+          body: JSON.stringify({ error: "नवीन पासवर्ड किमान ८ अक्षरांचा असावा / Password must be at least 8 characters" })
+        };
+      }
+
+      const newSalt = crypto.randomBytes(32).toString("hex");
+      const newHash = hashPassword(body.newPassword, newSalt);
+
+      await ddb.send(new PutCommand({
+        TableName: TABLE_NAME,
+        Item: {
+          id: "auth_config",
+          salt: newSalt,
+          hash: newHash,
+          recoveryPin: validPin,
+          iterations: 100000,
+          updatedAt: new Date().toISOString()
+        }
+      }));
+
+      return {
+        statusCode: 200,
+        headers: corsHeaders,
+        body: JSON.stringify({ success: true, message: "पासवर्ड यशस्वीरित्या बदलला! आता नवीन पासवर्डने लॉगिन करा. / Password reset successfully!" })
+      };
+    }
+
+    // 5. VERIFY AUTH FOR ALL OTHER POST ACTIONS (/upload, /data)
     const reqHeaders = event.headers || {};
     const adminKey = reqHeaders["x-admin-key"] || reqHeaders["X-Admin-Key"] || reqHeaders["authorization"] || reqHeaders["Authorization"];
     const providedKey = adminKey?.replace(/^Bearer\s+/i, "");
@@ -203,7 +258,7 @@ export const handler = async (event) => {
       };
     }
 
-    // 5. POST /upload (Upload Image to S3)
+    // 6. POST /upload (Upload Image to S3)
     if (rawPath.includes("/upload") || body.action === "upload") {
       const allowedMimes = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
       const contentType = allowedMimes.includes(body.contentType) ? body.contentType : "image/jpeg";
@@ -252,7 +307,7 @@ export const handler = async (event) => {
       };
     }
 
-    // 6. POST /data (Save Admin Data)
+    // 7. POST /data (Save Admin Data)
     if (body.data) {
       await ddb.send(new PutCommand({
         TableName: TABLE_NAME,
