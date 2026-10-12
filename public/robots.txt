@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /admin/*
 
-Sitemap: https://main.dnhik5dayaggh.amplifyapp.com/sitemap.xml
+Sitemap: https://www.shreekesharfabrication.in/sitemap.xml

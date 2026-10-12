@@ -10,7 +10,7 @@ export default function SEO({ title, description, image, url }) {
     : "Custom-built temple chariots (Rath) for Dindi Yatra and religious processions across Maharashtra."
     
   const defaultImage = "/images/hero.jpg" // Using hero image as default share image
-  const siteUrl = "https://wtl-shree-keshar-fabrication.vercel.app" // Update with final AWS URL if changed
+  const siteUrl = "https://www.shreekesharfabrication.in"
 
   const seoTitle = title ? `${title} | ${siteTitle}` : siteTitle
   const seoDescription = description || defaultDescription
