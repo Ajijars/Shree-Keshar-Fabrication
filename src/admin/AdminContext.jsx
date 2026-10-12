@@ -1,11 +1,14 @@
-import { createContext, useContext, useState, useCallback, useEffect } from "react"
+import { createContext, useContext, useState, useCallback, useEffect, useRef } from "react"
 
 const AdminContext = createContext(null)
 
 const STORAGE_KEY = "sk-admin-data"
 const AUTH_KEY = "sk-admin-auth"
 
-// Default admin password (owner should change this)
+// Live AWS API Gateway Endpoint
+const API_BASE = "https://9n5fxaqqel.execute-api.ap-southeast-2.amazonaws.com"
+
+// Default admin password
 const ADMIN_PASSWORD = "keshar2024"
 
 const defaultData = {
@@ -93,7 +96,7 @@ const defaultData = {
   },
 }
 
-function loadData() {
+function loadLocalData() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
@@ -106,19 +109,69 @@ function loadData() {
   return defaultData
 }
 
-function saveData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
-}
-
 export function AdminProvider({ children }) {
-  const [data, setData] = useState(loadData)
+  const [data, setData] = useState(loadLocalData)
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return sessionStorage.getItem(AUTH_KEY) === "true"
   })
+  const isInitialMount = useRef(true)
 
+  // Fetch live data from AWS on mount
   useEffect(() => {
-    saveData(data)
-  }, [data])
+    let isMounted = true
+    async function fetchRemoteData() {
+      try {
+        const res = await fetch(API_BASE, { method: "GET" })
+        if (res.ok) {
+          const json = await res.json()
+          if (json.data && isMounted) {
+            setData((prev) => ({
+              ...defaultData,
+              ...prev,
+              ...json.data,
+            }))
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...defaultData, ...json.data }))
+          }
+        }
+      } catch (err) {
+        console.warn("Could not reach AWS API, using local data cache:", err)
+      }
+    }
+    fetchRemoteData()
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  // Sync to local storage & AWS DynamoDB when data changes
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      return
+    }
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+
+    // Only sync writes to AWS if admin is authenticated
+    if (isAuthenticated) {
+      const timeout = setTimeout(async () => {
+        try {
+          await fetch(API_BASE, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-admin-key": ADMIN_PASSWORD,
+            },
+            body: JSON.stringify({ data }),
+          })
+        } catch (err) {
+          console.error("Failed to save data to AWS:", err)
+        }
+      }, 500)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [data, isAuthenticated])
 
   const login = useCallback((password) => {
     if (password === ADMIN_PASSWORD) {
@@ -134,15 +187,45 @@ export function AdminProvider({ children }) {
     sessionStorage.removeItem(AUTH_KEY)
   }, [])
 
-  // Gallery operations
-  const addGalleryImage = useCallback((imageData) => {
+  // Gallery operations: Uploads image to AWS S3 & adds to gallery state
+  const addGalleryImage = useCallback(async (imageData) => {
+    let finalSrc = imageData.src
+
+    // If source is base64 image data, upload directly to S3 bucket
+    if (finalSrc && finalSrc.startsWith("data:image")) {
+      try {
+        const uploadRes = await fetch(`${API_BASE}/upload`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-key": ADMIN_PASSWORD,
+          },
+          body: JSON.stringify({
+            action: "upload",
+            filename: `rath_${Date.now()}.jpg`,
+            base64Data: finalSrc,
+            contentType: "image/jpeg",
+          }),
+        })
+
+        if (uploadRes.ok) {
+          const uploadJson = await uploadRes.json()
+          if (uploadJson.url) {
+            finalSrc = uploadJson.url
+          }
+        }
+      } catch (uploadErr) {
+        console.warn("S3 upload failed, keeping local preview:", uploadErr)
+      }
+    }
+
     setData((prev) => ({
       ...prev,
       gallery: [
         ...prev.gallery,
         {
           id: Date.now().toString(),
-          src: imageData.src,
+          src: finalSrc,
           captionEn: imageData.captionEn || "Rath Work",
           captionMr: imageData.captionMr || "रथ काम",
           altEn: imageData.altEn || "Rath fabrication",
@@ -276,15 +359,8 @@ export function useAdmin() {
   return ctx
 }
 
-// Hook for public site to read admin data
+// Hook for public site components to consume live admin data
 export function useAdminData() {
-  const [data, setData] = useState(loadData)
-
-  useEffect(() => {
-    const handleStorage = () => setData(loadData())
-    window.addEventListener("storage", handleStorage)
-    return () => window.removeEventListener("storage", handleStorage)
-  }, [])
-
+  const { data } = useAdmin()
   return data
 }

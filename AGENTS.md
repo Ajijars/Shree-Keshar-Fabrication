@@ -38,4 +38,8 @@ Where this guidance conflicts with the project's own instructions, the project's
 - The user sets up billing, creates spend limits, and retrieves and pays invoices in AWS Settings. The user creates budgets and optimizes their costs in the AWS Billing and Cost Management console
 - Before starting a task, check whether a relevant AWS skill is available. Load the skill with retrieve_skill and prefer its guidance over general knowledge.
 
+### Help level
+
+help_level: HIGH
+
 <!-- END AWS Agent Toolkit rules -->
