@@ -26,12 +26,23 @@ export default function ContactForm({ showHeading = true }) {
   const serviceOptions = t("contact.serviceOptions")
   const owners = t("owners.items")
 
+  const sanitizeInput = (val, maxLen = 200) => {
+    if (typeof val !== "string") return ""
+    return val
+      .replace(/[<>]/g, "") // strip HTML tags to prevent XSS
+      .trim()
+      .slice(0, maxLen)
+  }
+
   const validate = () => {
     const next = {}
     if (!form.name.trim()) next.name = t("contact.errors.name")
     if (!form.phone.trim()) next.phone = t("contact.errors.phone")
     else if (!/^[0-9+\s-]{10,15}$/.test(form.phone.trim()))
       next.phone = t("contact.errors.phoneInvalid")
+    if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      next.email = t("contact.errors.emailInvalid") || "कृपया वैध ईमेल टाका / Enter valid email"
+    }
     if (!form.city) next.city = t("contact.errors.city")
     if (!form.service) next.service = t("contact.errors.service")
     if (!form.message.trim()) next.message = t("contact.errors.message")
@@ -55,16 +66,23 @@ export default function ContactForm({ showHeading = true }) {
     setIsSubmitting(true)
     setSubmitError("")
 
+    const cleanName = sanitizeInput(form.name, 80)
+    const cleanPhone = sanitizeInput(form.phone, 20)
+    const cleanEmail = sanitizeInput(form.email, 100)
+    const cleanCity = sanitizeInput(form.city, 50)
+    const cleanService = sanitizeInput(form.service, 80)
+    const cleanMessage = sanitizeInput(form.message, 1000)
+
     const web3Key = import.meta.env.VITE_WEB3FORMS_KEY
 
     // If preferred contact is WhatsApp or if no Web3Forms key is configured, send via WhatsApp
     if (form.contactMethod === "whatsapp" || !web3Key || web3Key === "YOUR_WEB3FORMS_ACCESS_KEY_HERE") {
       const text = `*नवीन चौकशी (New Inquiry) - Shree Keshar Fabrication*\n\n` +
-        `👤 *नाव (Name):* ${form.name || "-"}\n` +
-        `📞 *फोन (Phone):* ${form.phone || "-"}\n` +
-        `📍 *गाव/शहर (City):* ${form.city || "-"}\n` +
-        `🔧 *सेवा (Service):* ${form.service || "-"}\n` +
-        `📝 *संदेश (Message):* ${form.message || "-"}\n\n` +
+        `👤 *नाव (Name):* ${cleanName || "-"}\n` +
+        `📞 *फोन (Phone):* ${cleanPhone || "-"}\n` +
+        `📍 *गाव/शहर (City):* ${cleanCity || "-"}\n` +
+        `🔧 *सेवा (Service):* ${cleanService || "-"}\n` +
+        `📝 *संदेश (Message):* ${cleanMessage || "-"}\n\n` +
         `जय हरी विठ्ठल!`
       window.open(`https://wa.me/919699371940?text=${encodeURIComponent(text)}`, "_blank")
       setSubmitted(true)
@@ -82,9 +100,15 @@ export default function ContactForm({ showHeading = true }) {
         },
         body: JSON.stringify({
           access_key: web3Key,
-          subject: `New Lead from ${form.name} - Shree Keshar Fabrication`,
-          from_name: form.name,
-          ...form
+          subject: `New Lead from ${cleanName} - Shree Keshar Fabrication`,
+          from_name: cleanName,
+          name: cleanName,
+          phone: cleanPhone,
+          email: cleanEmail,
+          city: cleanCity,
+          service: cleanService,
+          message: cleanMessage,
+          contactMethod: form.contactMethod,
         }),
       })
 
@@ -252,8 +276,9 @@ export default function ContactForm({ showHeading = true }) {
                       value={form.email}
                       onChange={handleChange}
                       placeholder={t("contact.form.placeholders.email")}
-                      className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                      className={`w-full rounded-2xl border bg-white px-4 py-3 text-sm outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 ${errors.email ? "border-red-400" : "border-slate-200"}`}
                     />
+                    {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
                   </div>
 
                   <div>

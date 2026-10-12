@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { RotateCcw, AlertTriangle, Key, Lock, Check } from "lucide-react"
+import { RotateCcw, AlertTriangle, Key, Lock } from "lucide-react"
 import { useAdmin } from "./AdminContext"
 import PageIndicator from "./PageIndicator"
 import toast from "react-hot-toast"
@@ -37,8 +37,8 @@ export default function AdminSettings() {
       setPasswordError("कृपया सध्याचा पासवर्ड टाका / Enter current password")
       return
     }
-    if (newPassword.length < 6) {
-      setPasswordError("नवीन पासवर्ड किमान ६ अक्षरांचा असावा / Minimum 6 characters")
+    if (newPassword.length < 8) {
+      setPasswordError("नवीन पासवर्ड किमान ८ अक्षरांचा असावा / Minimum 8 characters")
       return
     }
     if (newPassword !== confirmPassword) {
@@ -173,7 +173,7 @@ export default function AdminSettings() {
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="किमान ६ अक्षरे"
+                placeholder="किमान ८ अक्षरे"
                 className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none transition focus:border-maroon-800 focus:ring-2 focus:ring-maroon-800/20"
                 required
               />

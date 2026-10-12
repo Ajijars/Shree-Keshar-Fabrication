@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { ArrowRight, CheckCircle2, Shield, Wrench, Sparkles } from "lucide-react"
+import { ArrowRight, CheckCircle2, Shield, Sparkles } from "lucide-react"
 import { useTranslation } from "../i18n/LanguageContext"
 import { useAdminData } from "../admin/AdminContext"
 import ImagePlaceholder from "./ImagePlaceholder"

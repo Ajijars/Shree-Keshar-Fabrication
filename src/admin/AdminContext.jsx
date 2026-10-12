@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect, useRef } from "react"
+import toast from "react-hot-toast"
 
 const AdminContext = createContext(null)
 
@@ -9,8 +10,8 @@ const KEY_STORAGE = "sk-admin-key"
 // Live AWS API Gateway Endpoint
 const API_BASE = "https://9n5fxaqqel.execute-api.ap-southeast-2.amazonaws.com"
 
-// Default fallback admin password
-const DEFAULT_ADMIN_PASSWORD = "keshar2024"
+// Inactivity timeout: 30 minutes
+const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000
 
 const defaultData = {
   gallery: [],
@@ -118,8 +119,40 @@ export function AdminProvider({ children }) {
   const isInitialMount = useRef(true)
 
   const getAdminKey = useCallback(() => {
-    return sessionStorage.getItem(KEY_STORAGE) || DEFAULT_ADMIN_PASSWORD
+    return sessionStorage.getItem(KEY_STORAGE) || ""
   }, [])
+
+  const logout = useCallback((reason = "") => {
+    setIsAuthenticated(false)
+    sessionStorage.removeItem(AUTH_KEY)
+    sessionStorage.removeItem(KEY_STORAGE)
+    if (reason === "inactivity") {
+      toast.error("सुरक्षेसाठी सत्र कालबाह्य झाले. कृपया पुन्हा लॉगिन करा. (Session timed out)")
+    }
+  }, [])
+
+  // Auto-logout after 30 minutes of inactivity for enhanced security
+  useEffect(() => {
+    if (!isAuthenticated) return
+
+    let timer
+    const resetTimer = () => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        logout("inactivity")
+      }, INACTIVITY_TIMEOUT_MS)
+    }
+
+    const activityEvents = ["mousedown", "mousemove", "keydown", "scroll", "touchstart"]
+    activityEvents.forEach((evt) => window.addEventListener(evt, resetTimer, { passive: true }))
+
+    resetTimer()
+
+    return () => {
+      clearTimeout(timer)
+      activityEvents.forEach((evt) => window.removeEventListener(evt, resetTimer))
+    }
+  }, [isAuthenticated, logout])
 
   // Fetch live data from AWS on mount
   useEffect(() => {
@@ -194,14 +227,7 @@ export function AdminProvider({ children }) {
       }
       return { success: false, error: "चुकीचा पासवर्ड / Wrong password" }
     } catch {
-      // Local fallback for offline mode
-      if (password === DEFAULT_ADMIN_PASSWORD) {
-        setIsAuthenticated(true)
-        sessionStorage.setItem(AUTH_KEY, "true")
-        sessionStorage.setItem(KEY_STORAGE, password)
-        return { success: true }
-      }
-      return { success: false, error: "Network error. Please try again." }
+      return { success: false, error: "सर्व्हरशी संपर्क होऊ शकला नाही. / Server connection error." }
     }
   }, [])
 
@@ -226,12 +252,6 @@ export function AdminProvider({ children }) {
     } catch (err) {
       return { success: false, error: err.message || "Network error" }
     }
-  }, [])
-
-  const logout = useCallback(() => {
-    setIsAuthenticated(false)
-    sessionStorage.removeItem(AUTH_KEY)
-    sessionStorage.removeItem(KEY_STORAGE)
   }, [])
 
   // Universal S3 image uploader (converts base64 to permanent S3 URL)

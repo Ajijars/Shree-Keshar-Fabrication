@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Truck, Wrench, Hammer, MapPin, IndianRupee, ArrowRight, MessageSquareQuote } from "lucide-react"
+import { Truck, Wrench, Hammer, MapPin, IndianRupee, MessageSquareQuote } from "lucide-react"
 import { useTranslation, serviceIcons } from "../i18n/LanguageContext"
 import { useAdminData } from "../admin/AdminContext"
 import SectionHeading from "./SectionHeading"

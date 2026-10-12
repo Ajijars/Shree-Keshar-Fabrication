@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Maximize2, X, Sparkles, Image as ImageIcon } from "lucide-react"
+import { Maximize2, X } from "lucide-react"
 import { siteData } from "../data/siteData"
 import { useTranslation } from "../i18n/LanguageContext"
 import { useAdminData } from "../admin/AdminContext"
