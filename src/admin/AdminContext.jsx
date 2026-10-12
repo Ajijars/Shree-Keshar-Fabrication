@@ -187,36 +187,43 @@ export function AdminProvider({ children }) {
     sessionStorage.removeItem(AUTH_KEY)
   }, [])
 
+  // Universal S3 image uploader (converts base64 to permanent S3 URL)
+  const uploadImage = useCallback(async (base64Data, filename = `img_${Date.now()}.jpg`) => {
+    if (!base64Data || typeof base64Data !== "string" || !base64Data.startsWith("data:image")) {
+      return base64Data
+    }
+    try {
+      const uploadRes = await fetch(`${API_BASE}/upload`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": ADMIN_PASSWORD,
+        },
+        body: JSON.stringify({
+          action: "upload",
+          filename,
+          base64Data,
+          contentType: "image/jpeg",
+        }),
+      })
+
+      if (uploadRes.ok) {
+        const uploadJson = await uploadRes.json()
+        if (uploadJson.url) {
+          return uploadJson.url
+        }
+      }
+    } catch (uploadErr) {
+      console.warn("S3 upload failed, keeping original:", uploadErr)
+    }
+    return base64Data
+  }, [])
+
   // Gallery operations: Uploads image to AWS S3 & adds to gallery state
   const addGalleryImage = useCallback(async (imageData) => {
     let finalSrc = imageData.src
-
-    // If source is base64 image data, upload directly to S3 bucket
     if (finalSrc && finalSrc.startsWith("data:image")) {
-      try {
-        const uploadRes = await fetch(`${API_BASE}/upload`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-admin-key": ADMIN_PASSWORD,
-          },
-          body: JSON.stringify({
-            action: "upload",
-            filename: `rath_${Date.now()}.jpg`,
-            base64Data: finalSrc,
-            contentType: "image/jpeg",
-          }),
-        })
-
-        if (uploadRes.ok) {
-          const uploadJson = await uploadRes.json()
-          if (uploadJson.url) {
-            finalSrc = uploadJson.url
-          }
-        }
-      } catch (uploadErr) {
-        console.warn("S3 upload failed, keeping local preview:", uploadErr)
-      }
+      finalSrc = await uploadImage(finalSrc, `rath_${Date.now()}.jpg`)
     }
 
     setData((prev) => ({
@@ -224,7 +231,7 @@ export function AdminProvider({ children }) {
       gallery: [
         ...prev.gallery,
         {
-          id: Date.now().toString(),
+          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           src: finalSrc,
           captionEn: imageData.captionEn || "Rath Work",
           captionMr: imageData.captionMr || "रथ काम",
@@ -234,7 +241,7 @@ export function AdminProvider({ children }) {
         },
       ],
     }))
-  }, [])
+  }, [uploadImage])
 
   const removeGalleryImage = useCallback((id) => {
     setData((prev) => ({
@@ -259,20 +266,28 @@ export function AdminProvider({ children }) {
     })
   }, [])
 
-  // Services operations
-  const updateService = useCallback((id, updates) => {
+  // Services operations with automatic S3 image upload
+  const updateService = useCallback(async (id, updates) => {
+    let finalUpdates = { ...updates }
+    if (finalUpdates.image && finalUpdates.image.startsWith("data:image")) {
+      finalUpdates.image = await uploadImage(finalUpdates.image, `service_${id}_${Date.now()}.jpg`)
+    }
     setData((prev) => ({
       ...prev,
-      services: prev.services.map((s) => (s.id === id ? { ...s, ...updates } : s)),
+      services: prev.services.map((s) => (s.id === id ? { ...s, ...finalUpdates } : s)),
     }))
-  }, [])
+  }, [uploadImage])
 
-  const addService = useCallback((service) => {
+  const addService = useCallback(async (service) => {
+    let finalService = { ...service }
+    if (finalService.image && finalService.image.startsWith("data:image")) {
+      finalService.image = await uploadImage(finalService.image, `service_${Date.now()}.jpg`)
+    }
     setData((prev) => ({
       ...prev,
-      services: [...prev.services, { id: Date.now().toString(), ...service }],
+      services: [...prev.services, { id: Date.now().toString(), ...finalService }],
     }))
-  }, [])
+  }, [uploadImage])
 
   const removeService = useCallback((id) => {
     setData((prev) => ({
@@ -290,28 +305,40 @@ export function AdminProvider({ children }) {
   }, [])
 
   // Hero operations
-  const updateHero = useCallback((updates) => {
+  const updateHero = useCallback(async (updates) => {
+    let finalUpdates = { ...updates }
+    if (finalUpdates.image && finalUpdates.image.startsWith("data:image")) {
+      finalUpdates.image = await uploadImage(finalUpdates.image, `hero_${Date.now()}.jpg`)
+    }
     setData((prev) => ({
       ...prev,
-      hero: { ...prev.hero, ...updates },
+      hero: { ...prev.hero, ...finalUpdates },
     }))
-  }, [])
+  }, [uploadImage])
 
-  // Shop image
-  const updateShopImage = useCallback((src) => {
-    setData((prev) => ({ ...prev, shopImage: src }))
-  }, [])
+  // Shop image with automatic S3 upload
+  const updateShopImage = useCallback(async (src) => {
+    let finalSrc = src
+    if (finalSrc && finalSrc.startsWith("data:image")) {
+      finalSrc = await uploadImage(finalSrc, `shop_${Date.now()}.jpg`)
+    }
+    setData((prev) => ({ ...prev, shopImage: finalSrc }))
+  }, [uploadImage])
 
-  // Owner operations
-  const updateOwner = useCallback((key, updates) => {
+  // Owner operations with automatic S3 upload
+  const updateOwner = useCallback(async (key, updates) => {
+    let finalUpdates = { ...updates }
+    if (finalUpdates.image && finalUpdates.image.startsWith("data:image")) {
+      finalUpdates.image = await uploadImage(finalUpdates.image, `owner_${key}_${Date.now()}.jpg`)
+    }
     setData((prev) => ({
       ...prev,
       owners: {
         ...prev.owners,
-        [key]: { ...prev.owners[key], ...updates },
+        [key]: { ...prev.owners[key], ...finalUpdates },
       },
     }))
-  }, [])
+  }, [uploadImage])
 
   // Social operations
   const updateSocial = useCallback((updates) => {
@@ -333,6 +360,7 @@ export function AdminProvider({ children }) {
         isAuthenticated,
         login,
         logout,
+        uploadImage,
         addGalleryImage,
         removeGalleryImage,
         updateGalleryImage,

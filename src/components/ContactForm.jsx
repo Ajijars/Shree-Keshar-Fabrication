@@ -55,6 +55,24 @@ export default function ContactForm({ showHeading = true }) {
     setIsSubmitting(true)
     setSubmitError("")
 
+    const web3Key = import.meta.env.VITE_WEB3FORMS_KEY
+
+    // If preferred contact is WhatsApp or if no Web3Forms key is configured, send via WhatsApp
+    if (form.contactMethod === "whatsapp" || !web3Key || web3Key === "YOUR_WEB3FORMS_ACCESS_KEY_HERE") {
+      const text = `*नवीन चौकशी (New Inquiry) - Shree Keshar Fabrication*\n\n` +
+        `👤 *नाव (Name):* ${form.name || "-"}\n` +
+        `📞 *फोन (Phone):* ${form.phone || "-"}\n` +
+        `📍 *गाव/शहर (City):* ${form.city || "-"}\n` +
+        `🔧 *सेवा (Service):* ${form.service || "-"}\n` +
+        `📝 *संदेश (Message):* ${form.message || "-"}\n\n` +
+        `जय हरी विठ्ठल!`
+      window.open(`https://wa.me/919699371940?text=${encodeURIComponent(text)}`, "_blank")
+      setSubmitted(true)
+      setForm(initialForm)
+      setIsSubmitting(false)
+      return
+    }
+
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
@@ -63,8 +81,7 @@ export default function ContactForm({ showHeading = true }) {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          // Replace this with your actual Web3Forms access key
-          access_key: "YOUR_WEB3FORMS_ACCESS_KEY_HERE",
+          access_key: web3Key,
           subject: `New Lead from ${form.name} - Shree Keshar Fabrication`,
           from_name: form.name,
           ...form
@@ -76,10 +93,10 @@ export default function ContactForm({ showHeading = true }) {
         setSubmitted(true)
         setForm(initialForm)
       } else {
-        setSubmitError(t("contact.errors.submissionFailed") || "Something went wrong. Please try again.")
+        setSubmitError(t("contact.errors.submissionFailed") || "Something went wrong. You can also contact us directly via WhatsApp.")
       }
-    } catch (err) {
-      setSubmitError(t("contact.errors.submissionFailed") || "Something went wrong. Please try again.")
+    } catch {
+      setSubmitError(t("contact.errors.submissionFailed") || "Something went wrong. You can also contact us directly via WhatsApp.")
     } finally {
       setIsSubmitting(false)
     }

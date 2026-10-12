@@ -1,3 +1,4 @@
+import { useState } from "react"
 import ImagePlaceholder from "./ImagePlaceholder"
 
 export default function SiteImage({
@@ -10,7 +11,9 @@ export default function SiteImage({
   className = "",
   imgClassName = "object-cover",
 }) {
-  if (src) {
+  const [hasError, setHasError] = useState(false)
+
+  if (src && !hasError) {
     return (
       <div className={`relative overflow-hidden ${aspect} ${className}`}>
         <img
@@ -18,6 +21,7 @@ export default function SiteImage({
           alt={alt}
           className={`h-full w-full ${imgClassName}`}
           loading="lazy"
+          onError={() => setHasError(true)}
         />
       </div>
     )
