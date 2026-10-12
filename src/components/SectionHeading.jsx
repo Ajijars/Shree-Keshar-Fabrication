@@ -1,21 +1,24 @@
 export default function SectionHeading({ title, subtitle, light = false }) {
   return (
-    <div className="mx-auto mb-12 max-w-2xl text-center">
+    <div className="mx-auto mb-14 max-w-2xl text-center">
       <h2
-        className={`font-display text-3xl font-bold tracking-tight sm:text-4xl ${light ? "text-white" : "text-maroon-900"}`}
+        className={`font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl ${
+          light ? "text-white" : "text-slate-900"
+        }`}
       >
         {title}
       </h2>
-      <div className="mx-auto mt-4 flex items-center justify-center gap-2">
-        <span className={`h-px w-12 ${light ? "bg-gold-500/60" : "bg-gold-500"}`} />
-        <span className={`text-lg ${light ? "text-gold-400" : "text-gold-500"}`}>✦</span>
-        <span className={`h-px w-12 ${light ? "bg-gold-500/60" : "bg-gold-500"}`} />
+      <div className="mx-auto mt-4 flex items-center justify-center gap-3">
+        <span className={`h-0.5 w-12 rounded-full ${light ? "bg-gradient-to-r from-transparent to-amber-400" : "bg-gradient-to-r from-transparent to-amber-500"}`} />
+        <span className={`text-base font-bold ${light ? "text-amber-300" : "text-amber-600"}`}>✦</span>
+        <span className={`h-0.5 w-12 rounded-full ${light ? "bg-gradient-to-l from-transparent to-amber-400" : "bg-gradient-to-l from-transparent to-amber-500"}`} />
       </div>
       {subtitle && (
-        <p className={`mt-4 text-base leading-relaxed ${light ? "text-white/75" : "text-gray-600"}`}>
+        <p className={`font-devanagari mt-4 text-sm sm:text-base leading-relaxed ${light ? "text-slate-200" : "text-slate-600"}`}>
           {subtitle}
         </p>
       )}
     </div>
   )
 }
+

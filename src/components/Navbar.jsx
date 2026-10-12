@@ -67,7 +67,7 @@ export default function Navbar() {
           <li className="ml-2">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-slate-950 shadow-xs transition hover:bg-amber-400 hover:shadow"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-2 text-sm font-bold text-slate-950 shadow-xs transition-all duration-300 hover:from-amber-400 hover:to-amber-500 hover:shadow-md hover:scale-105"
             >
               <Phone className="h-4 w-4" />
               {t("nav.getQuote")}
@@ -89,7 +89,7 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div className="border-t border-slate-200/80 bg-white/98 px-4 py-4 shadow-lg lg:hidden">
+        <div className="border-t border-slate-200/80 bg-white/98 px-4 py-4 shadow-xl backdrop-blur-xl lg:hidden animate-fade-up">
           <ul className="flex flex-col gap-1.5">
             {navRoutes.map((link) => (
               <li key={link.path}>
@@ -101,7 +101,7 @@ export default function Navbar() {
             <li className="pt-2">
               <Link
                 to="/contact"
-                className="block rounded-xl bg-amber-500 px-5 py-3 text-center text-sm font-semibold text-slate-950 shadow-sm"
+                className="block rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-3 text-center text-sm font-bold text-slate-950 shadow-sm"
               >
                 {t("nav.getQuote")}
               </Link>

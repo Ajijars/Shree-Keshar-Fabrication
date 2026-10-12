@@ -42,36 +42,59 @@ export default function Owners({ showHeading = true }) {
             return (
               <article
                 key={displayName}
-                className="overflow-hidden rounded-2xl border border-cream-200 bg-white shadow-sm transition hover:shadow-lg"
+                className="pro-card group overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:border-amber-400 hover:shadow-xl"
               >
-                <SiteImage
-                  src={displayImage}
-                  alt={displayName}
-                  label={displayName}
-                  sublabel={tReplace("placeholders.ownerPhoto", { name: displayName })}
-                  aspect="aspect-[5/4]"
-                  variant="gold"
-                  className="rounded-none rounded-t-2xl"
-                  imgClassName="object-cover object-top"
-                />
-                <div className="p-6">
-                  <h3 className="font-display text-2xl font-bold text-maroon-900">{displayName}</h3>
-                  <p className="mt-1 text-sm font-medium text-saffron-500">{displayRole}</p>
+                <div className="img-zoom-container">
+                  <SiteImage
+                    src={displayImage}
+                    alt={displayName}
+                    label={displayName}
+                    sublabel={tReplace("placeholders.ownerPhoto", { name: displayName })}
+                    aspect="aspect-[5/4]"
+                    variant="gold"
+                    className="rounded-none rounded-t-3xl"
+                    imgClassName="object-cover object-top"
+                  />
+                </div>
+                <div className="p-7">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-display text-2xl font-bold text-slate-900 group-hover:text-amber-800 transition">
+                        {displayName}
+                      </h3>
+                      <p className="mt-1 inline-block rounded-full bg-amber-50 px-3 py-0.5 text-xs font-bold text-amber-800 border border-amber-200/50">
+                        {displayRole}
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="font-devanagari mt-4 text-sm leading-relaxed text-slate-600">{displayBio}</p>
+
                   {displayPhone && (
-                    <a
-                      href={`tel:${displayPhone.replace(/\s/g, "")}`}
-                      className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-maroon-800 hover:text-saffron-500"
-                    >
-                      <Phone className="h-4 w-4" />
-                      {displayPhone}
-                    </a>
+                    <div className="mt-6 flex flex-wrap gap-3 border-t border-slate-100 pt-5">
+                      <a
+                        href={`tel:${displayPhone.replace(/\s/g, "")}`}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white shadow-2xs hover:bg-amber-600 transition"
+                      >
+                        <Phone className="h-3.5 w-3.5" />
+                        <span>{displayPhone}</span>
+                      </a>
+                      <a
+                        href={`https://wa.me/91${displayPhone.replace(/\D/g, "")}?text=${encodeURIComponent(`नमस्कार ${displayName}, मला रथ / फॅब्रिकेशन कामाबद्दल बोलायचे आहे.`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-100 transition"
+                      >
+                        <span>WhatsApp वर संपर्क</span>
+                      </a>
+                    </div>
                   )}
-                  <p className="mt-4 text-sm leading-relaxed text-gray-600">{displayBio}</p>
                 </div>
               </article>
             )
           })}
         </div>
+
       </div>
     </section>
   )

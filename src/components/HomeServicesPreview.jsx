@@ -35,21 +35,34 @@ export default function HomeServicesPreview() {
           </Link>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service, i) => {
-            const Icon = iconMap[serviceIcons[i]]
+            const Icon = iconMap[serviceIcons[i]] || Wrench
             return (
-              <article
+              <Link
                 key={service.title}
-                className="rounded-2xl border border-cream-200 bg-cream-50 p-5 transition hover:border-gold-500/30 hover:shadow-md"
+                to="/services"
+                className="pro-card group relative flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs transition-all duration-300 hover:border-amber-400 hover:shadow-lg"
               >
-                <div className="mb-3 inline-flex rounded-lg bg-maroon-900 p-2.5 text-gold-400">
-                  <Icon className="h-5 w-5" />
+                <div>
+                  <div className="mb-4 inline-flex rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/80 p-3.5 text-amber-800 border border-amber-200/50 shadow-2xs transition-all duration-300 group-hover:bg-amber-500 group-hover:text-slate-950 group-hover:scale-110">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="font-display text-lg font-bold text-slate-900 group-hover:text-amber-800 transition">
+                    {service.title}
+                  </h3>
+                  {service.description && (
+                    <p className="font-devanagari mt-2.5 text-xs text-slate-500 line-clamp-3 leading-relaxed">
+                      {service.description}
+                    </p>
+                  )}
                 </div>
-                <h3 className="font-display text-base font-semibold text-maroon-900">
-                  {service.title}
-                </h3>
-              </article>
+
+                <div className="mt-5 flex items-center gap-1.5 text-xs font-bold text-amber-700 transition group-hover:text-amber-600">
+                  <span>{t("common.readMore")}</span>
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
+                </div>
+              </Link>
             )
           })}
         </div>
@@ -57,3 +70,4 @@ export default function HomeServicesPreview() {
     </section>
   )
 }
+

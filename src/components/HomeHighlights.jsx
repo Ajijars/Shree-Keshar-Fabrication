@@ -20,30 +20,32 @@ export default function HomeHighlights() {
           </h2>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((item, i) => {
             const Icon = icons[i]
             return (
               <div
                 key={item.title}
-                className="rounded-2xl border border-cream-200 bg-white p-5 text-center"
+                className="pro-card group rounded-3xl border border-slate-200/90 bg-white p-7 text-center shadow-xs transition-all duration-300 hover:border-amber-400 hover:shadow-lg"
               >
-                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-saffron-500/15 text-saffron-500">
-                  <Icon className="h-5 w-5" />
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/90 text-amber-700 border border-amber-200/50 shadow-2xs transition-all duration-300 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950">
+                  <Icon className="h-7 w-7" />
                 </div>
-                <h3 className="font-display text-base font-semibold text-maroon-900">
+                <h3 className="font-display text-lg font-bold text-slate-900 group-hover:text-amber-800 transition">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm text-gray-600">{item.description}</p>
+                <p className="font-devanagari mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             )
           })}
         </div>
 
-        <div className="mt-10 text-center">
+        <div className="mt-12 text-center">
           <Link
             to="/about"
-            className="text-sm font-semibold text-maroon-800 underline-offset-4 hover:text-saffron-500 hover:underline"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-2.5 text-xs sm:text-sm font-bold text-slate-800 shadow-2xs transition hover:border-amber-500 hover:text-amber-800 hover:shadow-sm"
           >
             {t("common.learnMore")}
           </Link>
@@ -52,3 +54,4 @@ export default function HomeHighlights() {
     </section>
   )
 }
+

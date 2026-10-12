@@ -1,0 +1,16 @@
+{
+  "short_name": "श्री केशर",
+  "name": "श्री केशर फॅब्रिकेशन वर्क्स (Shree Keshar Fabrication)",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#fcfbf9",
+  "theme_color": "#d97706",
+  "display": "standalone",
+  "orientation": "portrait"
+}
