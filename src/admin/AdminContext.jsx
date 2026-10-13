@@ -276,6 +276,46 @@ export function AdminProvider({ children }) {
     }
   }, [])
 
+  // Send 6-digit SMS OTP to registered mobile (+91 96993 71940) via AWS SNS
+  const sendSmsOtp = useCallback(async () => {
+    try {
+      const res = await fetch(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "send-otp" }),
+      })
+      const json = await res.json()
+      if (res.ok) {
+        return { success: true, message: json.message || "OTP पाठवला आहे!", phone: json.phone }
+      }
+      return { success: false, error: json.error || "OTP पाठवण्यात त्रुटी" }
+    } catch {
+      return { success: false, error: "सर्व्हरशी संपर्क होऊ शकला नाही. (Network error)" }
+    }
+  }, [])
+
+  // Verify OTP and reset admin password via AWS Lambda & DynamoDB
+  const verifyOtpAndReset = useCallback(async (otp, newPassword) => {
+    try {
+      const res = await fetch(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "verify-otp-reset",
+          otp,
+          newPassword,
+        }),
+      })
+      const json = await res.json()
+      if (res.ok) {
+        return { success: true, message: json.message || "पासवर्ड यशस्वीरित्या बदलला!" }
+      }
+      return { success: false, error: json.error || "चुकीचा किंवा कालबाह्य OTP" }
+    } catch {
+      return { success: false, error: "सर्व्हरशी संपर्क होऊ शकला नाही. (Network error)" }
+    }
+  }, [])
+
   // Universal S3 image uploader (converts base64 to permanent S3 URL)
   const uploadImage = useCallback(async (base64Data, filename = `img_${Date.now()}.jpg`) => {
     if (!base64Data || typeof base64Data !== "string" || !base64Data.startsWith("data:image")) {
@@ -450,6 +490,8 @@ export function AdminProvider({ children }) {
         login,
         changePassword,
         resetPasswordWithPin,
+        sendSmsOtp,
+        verifyOtpAndReset,
         logout,
         uploadImage,
         addGalleryImage,
