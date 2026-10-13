@@ -50,10 +50,22 @@ Access at `/admin` — password: `keshar2024`
 | संपर्क माहिती | Phone, WhatsApp, email, address |
 | सेटिंग्स | Social media links |
 
+## Cloud Architecture & Backend
+
+- **Frontend Hosting**: AWS Amplify (Global CDN, SSL, HTTP Security Headers)
+- **Compute**: AWS Lambda (Node.js 20 ES Modules, Clean OOP Architecture)
+- **API**: Amazon API Gateway (RESTful Proxy, Strict CORS)
+- **Database**: Amazon DynamoDB (`AdminData` table, single-table pattern)
+- **Media Storage**: Amazon S3 (`shree-keshar-fabrication-gallery`)
+- **Messaging**: Amazon SNS (Transactional SMS OTP for password reset)
+
+## Academic Documentation (WTL Practical Report)
+
+Complete academic project report and practical viva guide available in:
+📄 **[WTL_PROJECT_REPORT.md](file:///c:/WTL_Shree_keshar_fabrication/WTL_PROJECT_REPORT.md)**
+
 ## Deployment
 
-```bash
-npm run build
-```
-
-Deployed on Vercel. Config in `vercel.json`.
+- **Live URL**: [https://main.dnhik5dayaggh.amplifyapp.com](https://main.dnhik5dayaggh.amplifyapp.com)
+- **CI/CD**: Automatic build on AWS Amplify via `amplify.yml`
+- **Build Command**: `npm run build` (Vite 8.2 bundle)
