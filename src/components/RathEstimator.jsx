@@ -143,7 +143,7 @@ export default function RathEstimator() {
   }
 
   return (
-    <section className="bg-gradient-to-b from-white via-amber-50/40 to-white py-16 sm:py-24 border-y border-amber-200/50">
+    <section id="estimator" className="scroll-mt-16 bg-gradient-to-b from-white via-amber-50/40 to-white py-16 sm:py-24 border-y border-amber-200/50">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/50 bg-amber-100/70 px-4 py-1.5 text-xs font-semibold text-amber-900 shadow-2xs">

@@ -8,6 +8,7 @@ import ServicesPage from "./pages/ServicesPage"
 import GalleryPage from "./pages/GalleryPage"
 import OwnersPage from "./pages/OwnersPage"
 import ContactPage from "./pages/ContactPage"
+import NotFoundPage from "./pages/NotFoundPage"
 
 // Admin
 import AdminGuard from "./admin/AdminGuard"
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/owners" element={<OwnersPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
 
           {/* Admin Panel */}

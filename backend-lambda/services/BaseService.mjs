@@ -1,7 +1,3 @@
-import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import { S3Client } from "@aws-sdk/client-s3";
-import { SNSClient } from "@aws-sdk/client-sns";
-
 export class BaseService {
   constructor({ ddb, s3, sns, tableName, bucketName, region, ownerPhone }) {
     this.ddb = ddb;

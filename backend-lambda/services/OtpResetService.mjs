@@ -1,5 +1,4 @@
-import { GetCommand, DeleteCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { PublishCommand } from "@aws-sdk/client-sns";
+import { GetCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import { BaseService } from "./BaseService.mjs";
 
 export class OtpResetService extends BaseService {

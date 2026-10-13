@@ -10,13 +10,13 @@ export default function LanguageSwitcher({ compact = false }) {
       role="group"
       aria-label={t("lang.switch")}
     >
-      <Languages className="ml-2 hidden h-4 w-4 text-amber-700/80 sm:block" />
+      {!compact && <Languages className="ml-2 hidden h-4 w-4 text-amber-700/80 sm:block" />}
       {(["mr", "en"]).map((code) => (
         <button
           key={code}
           type="button"
           onClick={() => setLang(code)}
-          className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+          className={`rounded-full transition ${compact ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-xs"} font-semibold ${
             lang === code
               ? "bg-amber-500 text-slate-950 shadow-xs font-bold"
               : "text-slate-600 hover:bg-slate-200/60 hover:text-slate-900"
