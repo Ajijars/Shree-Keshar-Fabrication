@@ -13,7 +13,7 @@ export const siteData = {
 
   owners: {
     prabhakar: {
-      phone: "+91 98765 43210",
+      phone: "+91 96993 71940",
       image: null,
     },
     harsh: {

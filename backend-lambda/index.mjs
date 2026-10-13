@@ -179,7 +179,7 @@ export const handler = async (event) => {
       }
 
       // Generate secure 6-digit OTP
-      const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const otpCode = crypto.randomInt(100000, 1000000).toString();
       const otpSalt = crypto.randomBytes(16).toString("hex");
       const otpHash = crypto.pbkdf2Sync(otpCode, otpSalt, 10000, 32, "sha256").toString("hex");
 
@@ -438,7 +438,7 @@ export const handler = async (event) => {
         console.warn("Rate limit check failed:", err);
       }
 
-      const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const otpCode = crypto.randomInt(100000, 1000000).toString();
       const otpSalt = crypto.randomBytes(16).toString("hex");
       const otpHash = crypto.pbkdf2Sync(otpCode, otpSalt, 10000, 32, "sha256").toString("hex");
 
