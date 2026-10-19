@@ -2,14 +2,14 @@ import { Helmet } from "react-helmet-async"
 import { useTranslation } from "../i18n/LanguageContext"
 
 export default function SEO({ title, description, image, url }) {
-  const { language } = useTranslation()
+  const { lang } = useTranslation()
   
-  const siteTitle = language === "mr" ? "श्री केशर फॅब्रिकेशन" : "Shree Keshar Fabrication"
-  const defaultDescription = language === "mr" 
+  const siteTitle = lang === "mr" ? "श्री केशर फॅब्रिकेशन" : "Shree Keshar Fabrication"
+  const defaultDescription = lang === "mr" 
     ? "दिंडी यात्रा आणि धार्मिक मिरवणुकीसाठी सानुकूल रथ निर्माण. पंढरपूर, आळंदी, देहू आणि संपूर्ण महाराष्ट्रात सेवा." 
     : "Custom-built temple chariots (Rath) for Dindi Yatra and religious processions across Maharashtra."
     
-  const defaultImage = "/images/hero.jpg" // Using hero image as default share image
+  const defaultImage = "/images/logo.png" // Use official circular emblem logo
   const siteUrl = "https://www.shreekesharfabrication.in"
 
   const seoTitle = title ? `${title} | ${siteTitle}` : siteTitle
@@ -39,7 +39,7 @@ export default function SEO({ title, description, image, url }) {
       <meta name="twitter:image" content={seoImage} />
       
       {/* Language */}
-      <html lang={language} />
+      <html lang={lang === "mr" ? "mr" : "en"} />
     </Helmet>
   )
 }

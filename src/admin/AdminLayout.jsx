@@ -90,7 +90,16 @@ export default function AdminLayout() {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-100 px-5 py-5">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-gold-500/50 bg-maroon-900">
+            <img
+              src="/images/logo.png"
+              alt="Shree Keshar Admin"
+              className="h-10 w-10 rounded-full object-cover border border-amber-500/50 shadow-xs bg-white"
+              onError={(e) => {
+                e.currentTarget.style.display = "none"
+                if (e.currentTarget.nextSibling) e.currentTarget.nextSibling.style.display = "flex"
+              }}
+            />
+            <div className="hidden h-10 w-10 items-center justify-center rounded-full border border-gold-500/50 bg-maroon-900">
               <span className="font-display text-sm font-bold text-gold-400">SK</span>
             </div>
             <div>

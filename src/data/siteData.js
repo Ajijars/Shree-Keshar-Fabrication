@@ -14,7 +14,7 @@ export const siteData = {
   owners: {
     prabhakar: {
       phone: "+91 96993 71940",
-      image: null,
+      image: "/images/owner-prabhakar.jpg",
     },
     harsh: {
       phone: "+91 96993 71940",

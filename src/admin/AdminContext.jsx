@@ -79,7 +79,7 @@ const defaultData = {
       bioEn: "With decades of devotion and skill, Prabhakar Mhaske has built countless Rath for Viththal Dindi and Payi Yatra across Maharashtra.",
       bioMr: "अनेक दशकांच्या भक्ती आणि कौशल्याने, प्रभाकर म्हसके यांनी महाराष्ट्रभर विठ्ठल दिंडी व पायी यात्रेसाठी असंख्य रथ बांधले.",
       phone: "+91 96993 71940",
-      image: "",
+      image: "/images/owner-prabhakar.jpg",
     },
     harsh: {
       nameEn: "Harsh Mhaske",

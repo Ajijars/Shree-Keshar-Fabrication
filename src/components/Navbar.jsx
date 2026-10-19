@@ -42,7 +42,16 @@ export default function Navbar() {
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
         <Link to="/" className="group flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-amber-500/60 bg-gradient-to-br from-amber-50 to-amber-100/60 shadow-xs transition group-hover:scale-105 group-hover:border-amber-600">
+          <img
+            src="/images/logo.png"
+            alt={t("business.shortName")}
+            className="h-11 w-11 rounded-full object-cover border-2 border-amber-500/70 shadow-xs transition group-hover:scale-105 group-hover:border-amber-600 bg-white"
+            onError={(e) => {
+              e.currentTarget.style.display = "none"
+              if (e.currentTarget.nextSibling) e.currentTarget.nextSibling.style.display = "flex"
+            }}
+          />
+          <div className="hidden h-11 w-11 items-center justify-center rounded-full border-2 border-amber-500/60 bg-gradient-to-br from-amber-50 to-amber-100/60 shadow-xs">
             <span className="font-display text-lg font-bold text-amber-800">SK</span>
           </div>
           <div>

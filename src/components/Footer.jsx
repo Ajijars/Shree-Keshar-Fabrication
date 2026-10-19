@@ -27,7 +27,16 @@ export default function Footer() {
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-gold-500/50 bg-gold-500/10">
+                <img
+                  src="/images/logo.png"
+                  alt={t("business.shortName")}
+                  className="h-10 w-10 rounded-full object-cover border border-amber-400/60 shadow-xs bg-white"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none"
+                    if (e.currentTarget.nextSibling) e.currentTarget.nextSibling.style.display = "flex"
+                  }}
+                />
+                <div className="hidden h-10 w-10 items-center justify-center rounded-full border border-gold-500/50 bg-gold-500/10">
                   <span className="font-display font-bold text-gold-400">SK</span>
                 </div>
                 <div>
