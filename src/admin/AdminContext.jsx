@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useCallback, useEffect, useRef } from "react"
 import toast from "react-hot-toast"
+import { DEFAULT_GALLERY_PHOTOS } from "../data/defaultGallery"
 
 const AdminContext = createContext(null)
 
@@ -15,7 +16,7 @@ const API_BASE = "https://9n5fxaqqel.execute-api.ap-southeast-2.amazonaws.com"
 const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000
 
 const defaultData = {
-  gallery: [],
+  gallery: DEFAULT_GALLERY_PHOTOS,
   services: [
     {
       id: "1",
@@ -104,7 +105,11 @@ function loadLocalData() {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       const parsed = JSON.parse(stored)
-      return { ...defaultData, ...parsed }
+      const gallery =
+        Array.isArray(parsed.gallery) && parsed.gallery.length > 0
+          ? parsed.gallery
+          : DEFAULT_GALLERY_PHOTOS
+      return { ...defaultData, ...parsed, gallery }
     }
   } catch {
     // ignore
@@ -164,11 +169,18 @@ export function AdminProvider({ children }) {
         if (res.ok) {
           const json = await res.json()
           if (json.data && isMounted) {
-            setData((prev) => ({
-              ...defaultData,
-              ...prev,
-              ...json.data,
-            }))
+            setData((prev) => {
+              const remoteGallery =
+                Array.isArray(json.data.gallery) && json.data.gallery.length > 0
+                  ? json.data.gallery
+                  : (prev.gallery && prev.gallery.length > 0 ? prev.gallery : DEFAULT_GALLERY_PHOTOS)
+              return {
+                ...defaultData,
+                ...prev,
+                ...json.data,
+                gallery: remoteGallery,
+              }
+            })
             localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...defaultData, ...json.data }))
           }
         }
@@ -380,11 +392,45 @@ export function AdminProvider({ children }) {
     }))
   }, [])
 
-  const updateGalleryImage = useCallback((id, updates) => {
+  const updateGalleryImage = useCallback(async (id, updates) => {
+    let finalUpdates = { ...updates }
+    if (finalUpdates.src && finalUpdates.src.startsWith("data:image")) {
+      finalUpdates.src = await uploadImage(finalUpdates.src, `rath_${id}_${Date.now()}.jpg`)
+    }
     setData((prev) => ({
       ...prev,
-      gallery: prev.gallery.map((img) => (img.id === id ? { ...img, ...updates } : img)),
+      gallery: prev.gallery.map((img) => (img.id === id ? { ...img, ...finalUpdates } : img)),
     }))
+  }, [uploadImage])
+
+  const moveGalleryItem = useCallback((index, direction) => {
+    setData((prev) => {
+      const targetIndex = direction === "up" ? index - 1 : index + 1
+      if (targetIndex < 0 || targetIndex >= prev.gallery.length) return prev
+      const newGallery = [...prev.gallery]
+      const temp = newGallery[index]
+      newGallery[index] = newGallery[targetIndex]
+      newGallery[targetIndex] = temp
+      return { ...prev, gallery: newGallery }
+    })
+  }, [])
+
+  const resetGalleryToDefault = useCallback(() => {
+    setData((prev) => ({
+      ...prev,
+      gallery: [...DEFAULT_GALLERY_PHOTOS],
+    }))
+  }, [])
+
+  const importDefaultPhotos = useCallback(() => {
+    setData((prev) => {
+      const existingSrcs = new Set(prev.gallery.map((img) => img.src))
+      const toAdd = DEFAULT_GALLERY_PHOTOS.filter((img) => !existingSrcs.has(img.src))
+      return {
+        ...prev,
+        gallery: [...prev.gallery, ...toAdd],
+      }
+    })
   }, [])
 
   const reorderGallery = useCallback((fromIndex, toIndex) => {
@@ -499,6 +545,9 @@ export function AdminProvider({ children }) {
         removeGalleryImage,
         updateGalleryImage,
         reorderGallery,
+        moveGalleryItem,
+        resetGalleryToDefault,
+        importDefaultPhotos,
         updateService,
         addService,
         removeService,

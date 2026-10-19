@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react"
 import { Maximize2, X } from "lucide-react"
-import { siteData } from "../data/siteData"
 import { useTranslation } from "../i18n/LanguageContext"
 import { useAdminData } from "../admin/AdminContext"
 import SectionHeading from "./SectionHeading"
 import SiteImage from "./SiteImage"
+import { DEFAULT_GALLERY_PHOTOS } from "../data/defaultGallery"
 
 export default function Gallery({ showHeading = true }) {
-  const { t, lang } = useTranslation()
+  const { lang } = useTranslation()
   const adminData = useAdminData()
-  const translationItems = t("gallery.items")
   const [activeTab, setActiveTab] = useState("all")
   const [selectedImage, setSelectedImage] = useState(null)
 
@@ -22,35 +21,21 @@ export default function Gallery({ showHeading = true }) {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [])
 
-  // Merge: admin gallery photos + static siteData photos
-  const adminPhotos = adminData.gallery || []
-  const staticPhotos = siteData.images.gallery || []
+  // Admin gallery photos or default fallback
+  const adminPhotos = adminData?.gallery || []
+  const sourcePhotos = adminPhotos.length > 0 ? adminPhotos : DEFAULT_GALLERY_PHOTOS
 
-  // Build combined gallery items with categories
-  const allItems = []
-
-  adminPhotos.forEach((photo, i) => {
-    allItems.push({
-      src: photo.src,
-      caption: lang === "mr" ? photo.captionMr : photo.captionEn,
-      alt: lang === "mr" ? (photo.altMr || photo.captionMr) : (photo.altEn || photo.captionEn),
-      category: photo.category || (i % 2 === 0 ? "rath" : "fabrication"),
-      isAdmin: true,
-    })
-  })
-
-  staticPhotos.forEach((src, index) => {
-    if (src) {
-      const item = translationItems[index] || { caption: "Rath Work", alt: "Rath fabrication" }
-      allItems.push({
-        src,
-        caption: item.caption,
-        alt: item.alt,
-        category: index < 2 ? "rath" : index === 2 ? "yatra" : "fabrication",
-        isAdmin: false,
-      })
-    }
-  })
+  // Build gallery items with bilingual captions and categories
+  const allItems = sourcePhotos.map((photo, i) => ({
+    src: photo.src,
+    caption: lang === "mr" ? (photo.captionMr || photo.caption) : (photo.captionEn || photo.caption),
+    alt:
+      lang === "mr"
+        ? (photo.altMr || photo.captionMr || photo.alt || "श्री केशर फॅब्रिकेशन")
+        : (photo.altEn || photo.captionEn || photo.alt || "Shree Keshar Fabrication"),
+    category: photo.category || (i % 2 === 0 ? "rath" : "fabrication"),
+    isAdmin: Boolean(photo.id && !photo.id.startsWith("default-")),
+  }))
 
   const isMr = lang === "mr"
   const tabs = [
