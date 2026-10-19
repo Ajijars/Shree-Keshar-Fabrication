@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "zip": "python -c \"import os, zipfile; zf = zipfile.ZipFile('dist.zip', 'w', zipfile.ZIP_DEFLATED); [zf.write(os.path.join(r, f), os.path.relpath(os.path.join(r, f), 'dist').replace('\\\\\\\\', '/')) for r, d, fs in os.walk('dist') for f in fs]; zf.close()\""
   },
   "dependencies": {
     "lucide-react": "^1.31.0",
