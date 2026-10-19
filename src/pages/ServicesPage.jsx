@@ -2,6 +2,7 @@ import PageBanner from "../components/PageBanner"
 import Services from "../components/Services"
 import RathEstimator from "../components/RathEstimator"
 import ServiceProcess from "../components/ServiceProcess"
+import FAQ from "../components/FAQ"
 import { useTranslation } from "../i18n/LanguageContext"
 import SEO from "../components/SEO"
 
@@ -15,6 +16,7 @@ export default function ServicesPage() {
       <Services showHeading={false} />
       <RathEstimator />
       <ServiceProcess />
+      <FAQ />
     </main>
   )
 }

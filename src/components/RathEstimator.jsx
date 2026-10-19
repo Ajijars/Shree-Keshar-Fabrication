@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Calculator, CheckCircle2, MessageCircle, Sparkles, Shield, Clock } from "lucide-react"
+import { Calculator, CheckCircle2, MessageCircle, Sparkles, Shield, Clock, Copy, Check, Share2 } from "lucide-react"
 import { useTranslation } from "../i18n/LanguageContext"
 import { siteData } from "../data/siteData"
 
@@ -10,6 +10,7 @@ export default function RathEstimator() {
   const [rathType, setRathType] = useState("dindi")
   const [size, setSize] = useState("medium")
   const [features, setFeatures] = useState(["lighting", "brakes"])
+  const [copied, setCopied] = useState(false)
 
   const rathTypes = [
     {
@@ -116,30 +117,56 @@ export default function RathEstimator() {
 
   const estimatedTotal = Math.round(selectedType.basePrice * selectedSize.multiplier + featuresCost)
 
+  const typeName = isMr ? selectedType.titleMr : selectedType.titleEn
+  const sizeName = isMr ? selectedSize.labelMr : selectedSize.labelEn
+  const selectedFeaturesNames = features
+    .map((fId) => {
+      const f = featureOptions.find((opt) => opt.id === fId)
+      return f ? (isMr ? f.labelMr : f.labelEn) : ""
+    })
+    .filter(Boolean)
+    .join(", ")
+
+  const getSummaryMessage = () =>
+    `*नवीन रथ कोटेशन चौकशी (Rath Quotation Inquiry)*\n` +
+    `------------------------------------\n` +
+    `🛞 *रथाचा प्रकार:* ${typeName}\n` +
+    `📏 *उंची / आकार:* ${sizeName}\n` +
+    `✨ *वैशिष्ट्ये:* ${selectedFeaturesNames || "मानक (Standard)"}\n` +
+    `💰 *अंदाजे बजेट:* ₹${estimatedTotal.toLocaleString("en-IN")}\n` +
+    `⏳ *अंदाजे कालावधी:* ${isMr ? selectedSize.daysMr : selectedSize.daysEn}\n\n` +
+    `श्री केशर फॅब्रिकेशन वर्क्स — पंढरपूर, आळंदी व महाराष्ट्र.\n` +
+    `जय हरी विठ्ठल!`
+
   const handleSendWhatsApp = () => {
-    const typeName = isMr ? selectedType.titleMr : selectedType.titleEn
-    const sizeName = isMr ? selectedSize.labelMr : selectedSize.labelEn
-    const selectedFeaturesNames = features
-      .map((fId) => {
-        const f = featureOptions.find((opt) => opt.id === fId)
-        return f ? (isMr ? f.labelMr : f.labelEn) : ""
-      })
-      .filter(Boolean)
-      .join(", ")
-
-    const message =
-      `*नवीन रथ कोटेशन चौकशी (Rath Quotation Inquiry)*\n` +
-      `------------------------------------\n` +
-      `🛞 *रथाचा प्रकार:* ${typeName}\n` +
-      `📏 *उंची / आकार:* ${sizeName}\n` +
-      `✨ *वैशिष्ट्ये:* ${selectedFeaturesNames || "मानक (Standard)"}\n` +
-      `💰 *अंदाजे बजेट:* ₹${estimatedTotal.toLocaleString("en-IN")}\n` +
-      `⏳ *अंदाजे कालावधी:* ${isMr ? selectedSize.daysMr : selectedSize.daysEn}\n\n` +
-      `कृपया अधिक माहिती व अंतिम कोटेशन द्यावे.\n` +
-      `जय हरी विठ्ठल!`
-
-    const url = `https://wa.me/${siteData.contact.whatsapp}?text=${encodeURIComponent(message)}`
+    const url = `https://wa.me/${siteData.contact.whatsapp}?text=${encodeURIComponent(getSummaryMessage())}`
     window.open(url, "_blank")
+  }
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(getSummaryMessage())
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    } catch {
+      // fallback
+    }
+  }
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "श्री केशर फॅब्रिकेशन रथ अंदाजपत्रक",
+          text: getSummaryMessage(),
+          url: "https://www.shreekesharfabrication.in/services#estimator",
+        })
+      } catch {
+        // user cancelled
+      }
+    } else {
+      handleCopy()
+    }
   }
 
   return (
@@ -305,16 +332,53 @@ export default function RathEstimator() {
                 </p>
               </div>
 
-              <button
-                type="button"
-                onClick={handleSendWhatsApp}
-                className="w-full flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-6 py-4 text-sm font-bold text-white shadow-md transition hover:bg-emerald-500 hover:shadow-lg"
-              >
-                <MessageCircle className="h-5 w-5" />
-                <span className="font-devanagari">
-                  {isMr ? "WhatsApp वर कोटेशन मिळवा" : "Send Quote to WhatsApp"}
-                </span>
-              </button>
+              <div className="space-y-2.5">
+                <button
+                  type="button"
+                  onClick={handleSendWhatsApp}
+                  className="w-full flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-md transition hover:bg-emerald-500 hover:shadow-lg active:scale-95"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  <span className="font-devanagari">
+                    {isMr ? "WhatsApp वर कोटेशन मिळवा" : "Send Quote to WhatsApp"}
+                  </span>
+                </button>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs font-bold text-slate-700 shadow-2xs hover:border-amber-400 hover:bg-amber-50/50 hover:text-amber-800 transition active:scale-95"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-emerald-600" />
+                        <span className="font-devanagari text-emerald-700">
+                          {isMr ? "कॉपी झाले!" : "Copied!"}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5 text-amber-600" />
+                        <span className="font-devanagari">
+                          {isMr ? "तपशील कॉपी करा" : "Copy Specs"}
+                        </span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleShare}
+                    className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs font-bold text-slate-700 shadow-2xs hover:border-amber-400 hover:bg-amber-50/50 hover:text-amber-800 transition active:scale-95"
+                  >
+                    <Share2 className="h-3.5 w-3.5 text-amber-600" />
+                    <span className="font-devanagari">
+                      {isMr ? "मंडळात शेअर करा" : "Share Estimate"}
+                    </span>
+                  </button>
+                </div>
+              </div>
 
               <div className="mt-4 flex items-center justify-center gap-4 text-[11px] text-slate-500 font-devanagari">
                 <span className="inline-flex items-center gap-1">

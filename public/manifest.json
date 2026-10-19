@@ -1,16 +1,52 @@
 {
   "short_name": "श्री केशर",
-  "name": "श्री केशर फॅब्रिकेशन वर्क्स (Shree Keshar Fabrication)",
+  "name": "श्री केशर फॅब्रिकेशन वर्क्स (Shree Keshar Fabrication Works)",
+  "description": "विठ्ठल दिंडी व पायी यात्रेसाठी पवित्र व मजबूत रथ निर्माण आणि धातू फॅब्रिकेशन — संपूर्ण महाराष्ट्र सेवा.",
   "icons": [
     {
       "src": "/favicon.svg",
       "type": "image/svg+xml",
       "sizes": "any"
+    },
+    {
+      "src": "/images/logo.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/",
+  "scope": "/",
+  "id": "/",
   "background_color": "#fcfbf9",
   "theme_color": "#d97706",
   "display": "standalone",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "categories": ["lifestyle", "business"],
+  "shortcuts": [
+    {
+      "name": "कॉल करा (Call Now)",
+      "short_name": "कॉल",
+      "url": "/contact",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "अंदाजपत्रक (Estimator)",
+      "short_name": "अंदाजपत्रक",
+      "url": "/services#estimator",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "कामे व फोटो (Gallery)",
+      "short_name": "गॅलरी",
+      "url": "/gallery",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    }
+  ]
 }

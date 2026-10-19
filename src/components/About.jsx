@@ -1,7 +1,6 @@
 import { useTranslation } from "../i18n/LanguageContext"
 import { useAdminData } from "../admin/AdminContext"
 import SectionHeading from "./SectionHeading"
-import ImagePlaceholder from "./ImagePlaceholder"
 
 export default function About({ showHeading = true }) {
   const { t } = useTranslation()
@@ -41,21 +40,23 @@ export default function About({ showHeading = true }) {
           </div>
 
           <div className="space-y-5">
-            <div className="pro-card overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-3 shadow-lg">
-              {adminData.shopImage ? (
+            <div className="pro-card card-shine overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-3 shadow-lg">
+              <div className="img-zoom-container rounded-2xl overflow-hidden aspect-[4/3] relative">
+                <div className="absolute top-3 left-3 z-10 flex items-center gap-2 rounded-full border border-amber-400/50 bg-slate-950/80 px-3 py-1 text-xs font-semibold text-amber-200 backdrop-blur-md shadow-md">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="font-devanagari">श्री केशर कार्यशाळा • निर्मिती</span>
+                </div>
                 <img
-                  src={adminData.shopImage}
-                  alt="Workshop"
+                  src={adminData.shopImage || "/images/gallery/rath-7.jpg"}
+                  alt="Shree Keshar Fabrication Workshop"
                   className="aspect-[4/3] w-full rounded-2xl object-cover"
                 />
-              ) : (
-                <ImagePlaceholder
-                  label={t("placeholders.shopLabel")}
-                  sublabel={t("placeholders.shopSublabel")}
-                  aspect="aspect-[4/3]"
-                  variant="gold"
-                />
-              )}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent p-3 pt-6">
+                  <p className="font-devanagari text-xs font-bold text-white">
+                    प्रत्यक्ष रथ बांधणी • अखंड निष्ठा व अचूक अभियांत्रिकी
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="rounded-3xl border border-amber-300/80 bg-gradient-to-br from-amber-50 via-amber-100/40 to-amber-50 p-7 shadow-xs">

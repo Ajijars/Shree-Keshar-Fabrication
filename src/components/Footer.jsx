@@ -58,6 +58,16 @@ export default function Footer() {
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <Link to="/services#estimator" className="text-sm text-amber-300/90 transition hover:text-gold-400">
+                    🧮 {t("nav.services")}: {t("services.pageTitle").includes("सेवा") ? "अंदाजपत्रक" : "Estimator"}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/services#faq" className="text-sm text-white/60 transition hover:text-gold-400">
+                    ❓ FAQ ({t("services.pageTitle").includes("सेवा") ? "प्रश्नोत्तरे" : "Questions"})
+                  </Link>
+                </li>
               </ul>
             </div>
 
