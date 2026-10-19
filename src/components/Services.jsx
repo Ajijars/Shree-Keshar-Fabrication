@@ -33,10 +33,12 @@ export default function Services({ showHeading = true }) {
             const title = lang === "mr" ? (service.titleMr || service.titleEn) : (service.titleEn || service.titleMr)
             const desc = lang === "mr" ? (service.descMr || service.descEn) : (service.descEn || service.descMr)
 
+            const delayClass = `delay-${(i + 1) * 150}`
+
             return (
               <article
                 key={service.id || title}
-                className="pro-card group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:border-amber-400 hover:shadow-xl"
+                className={`pro-card card-shine reveal-on-scroll ${delayClass} group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs hover:border-amber-400 hover:shadow-2xl`}
               >
                 <div>
                   {service.image ? (
@@ -51,7 +53,7 @@ export default function Services({ showHeading = true }) {
                   
                   <div className="p-7">
                     {!service.image && (
-                      <div className="mb-5 inline-flex rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/80 p-3.5 text-amber-800 border border-amber-200/50 shadow-2xs group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
+                      <div className="mb-5 inline-flex rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/80 p-3.5 text-amber-800 border border-amber-200/50 shadow-2xs group-hover:scale-110 group-hover:rotate-6 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
                         <Icon className="h-6 w-6" />
                       </div>
                     )}
@@ -82,7 +84,7 @@ export default function Services({ showHeading = true }) {
 
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-amber-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-amber-400 shadow-2xs transition"
+                    className="btn-interactive inline-flex items-center gap-1.5 rounded-full bg-amber-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-amber-400 shadow-2xs"
                   >
                     <MessageSquareQuote className="h-3.5 w-3.5" />
                     <span>{isMr ? "चौकशी करा" : "Request Quote"}</span>

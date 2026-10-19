@@ -37,7 +37,7 @@ export default function Hero() {
           <div className="mt-8 flex flex-wrap items-center gap-3.5">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 px-7 py-3.5 text-sm font-semibold text-slate-950 shadow-lg transition-all duration-300 hover:scale-105 hover:from-amber-400 hover:to-amber-500 hover:shadow-amber-500/25"
+              className="btn-interactive inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 px-7 py-3.5 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-500/20 hover:from-amber-400 hover:to-amber-500 hover:shadow-amber-500/35"
             >
               <Phone className="h-4 w-4" />
               {t("hero.requestQuote")}
@@ -45,7 +45,7 @@ export default function Hero() {
 
             <Link
               to="/services#estimator"
-              className="inline-flex items-center gap-2 rounded-full border border-amber-400/60 bg-amber-500/15 px-6 py-3.5 text-sm font-semibold text-amber-300 backdrop-blur-sm transition-all duration-300 hover:bg-amber-500/30 hover:scale-105"
+              className="btn-interactive inline-flex items-center gap-2 rounded-full border border-amber-400/60 bg-amber-500/15 px-6 py-3.5 text-sm font-semibold text-amber-300 backdrop-blur-sm hover:bg-amber-500/30 hover:border-amber-400"
             >
               <Calculator className="h-4 w-4 text-amber-400" />
               <span>{lang === "mr" ? "रथ खर्च अंदाजपत्रक" : "Rath Cost Estimator"}</span>
@@ -55,7 +55,7 @@ export default function Hero() {
               href={`https://wa.me/${siteData.contact.whatsapp}?text=${encodeURIComponent(t("whatsapp.message"))}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-emerald-400/60"
+              className="btn-interactive inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/20 hover:border-emerald-400/60"
             >
               <MessageCircle className="h-4 w-4 text-emerald-400" />
               {t("hero.whatsapp")}

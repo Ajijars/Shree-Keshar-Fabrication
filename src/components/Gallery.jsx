@@ -75,12 +75,12 @@ export default function Gallery({ showHeading = true }) {
         )}
 
         {/* Filter Tabs */}
-        <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
+        <div className="mb-10 flex flex-wrap items-center justify-center gap-2 reveal-on-scroll">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`rounded-full px-5 py-2 text-xs sm:text-sm font-bold transition-all duration-300 ${
+              className={`btn-interactive rounded-full px-5 py-2 text-xs sm:text-sm font-bold transition-all duration-300 ${
                 activeTab === tab.id
                   ? "bg-amber-500 text-slate-950 shadow-md scale-105"
                   : "bg-white text-slate-700 border border-slate-200/90 hover:border-amber-400 hover:text-amber-800"
@@ -92,45 +92,48 @@ export default function Gallery({ showHeading = true }) {
         </div>
 
         {filteredItems.length === 0 ? (
-          <div className="py-16 text-center">
+          <div className="py-16 text-center reveal-zoom">
             <p className="text-slate-400">{isMr ? "या प्रकारात लवकरच फोटो जोडले जातील" : "Photos coming soon"}</p>
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredItems.map((item, index) => (
-              <figure
-                key={`${item.src}-${index}`}
-                onClick={() => setSelectedImage(item)}
-                className="pro-card group cursor-pointer overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:border-amber-400 hover:shadow-xl"
-              >
-                <div className="relative overflow-hidden">
-                  <SiteImage
-                    src={item.src}
-                    alt={item.alt}
-                    label={item.caption}
-                    sublabel={item.alt}
-                    aspect="aspect-[4/3]"
-                    variant={index % 2 === 0 ? "default" : "gold"}
-                  />
-                  {/* Subtle hover overlay with inspect icon */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-slate-950/40 opacity-0 backdrop-blur-2xs transition-opacity duration-300 group-hover:opacity-100">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-4 py-2 text-xs font-bold text-slate-950 shadow-lg backdrop-blur-md">
-                      <Maximize2 className="h-3.5 w-3.5 text-amber-600" />
-                      <span>{isMr ? "मोठा फोटो पहा" : "View Fullscreen"}</span>
-                    </span>
+            {filteredItems.map((item, index) => {
+              const delayClass = `delay-${((index % 6) + 1) * 100}`
+              return (
+                <figure
+                  key={`${item.src}-${index}`}
+                  onClick={() => setSelectedImage(item)}
+                  className={`pro-card card-shine reveal-on-scroll ${delayClass} group cursor-pointer overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs hover:border-amber-400 hover:shadow-2xl`}
+                >
+                  <div className="relative overflow-hidden img-zoom-container">
+                    <SiteImage
+                      src={item.src}
+                      alt={item.alt}
+                      label={item.caption}
+                      sublabel={item.alt}
+                      aspect="aspect-[4/3]"
+                      variant={index % 2 === 0 ? "default" : "gold"}
+                    />
+                    {/* Subtle hover overlay with inspect icon */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-slate-950/45 opacity-0 backdrop-blur-2xs transition-all duration-300 group-hover:opacity-100">
+                      <span className="btn-interactive inline-flex items-center gap-1.5 rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-slate-950 shadow-xl backdrop-blur-md">
+                        <Maximize2 className="h-3.5 w-3.5 text-amber-600" />
+                        <span>{isMr ? "मोठा फोटो पहा" : "View Fullscreen"}</span>
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <figcaption className="flex items-center justify-between border-t border-slate-100 px-5 py-3.5 bg-white">
-                  <span className="font-devanagari text-sm font-semibold text-slate-800 group-hover:text-amber-800 transition">
-                    {item.caption}
-                  </span>
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
-                    {item.category === "rath" ? "रथ" : item.category === "yatra" ? "यात्रा" : "क्राफ्ट"}
-                  </span>
-                </figcaption>
-              </figure>
-            ))}
+                  <figcaption className="flex items-center justify-between border-t border-slate-100 px-5 py-3.5 bg-white">
+                    <span className="font-devanagari text-sm font-semibold text-slate-800 group-hover:text-amber-800 transition">
+                      {item.caption}
+                    </span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
+                      {item.category === "rath" ? "रथ" : item.category === "yatra" ? "यात्रा" : "क्राफ्ट"}
+                    </span>
+                  </figcaption>
+                </figure>
+              )
+            })}
           </div>
         )}
 
@@ -141,7 +144,7 @@ export default function Gallery({ showHeading = true }) {
             onClick={() => setSelectedImage(null)}
           >
             <div
-              className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl"
+              className="animate-modal-pop relative max-h-[90vh] max-w-4xl overflow-hidden rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <button

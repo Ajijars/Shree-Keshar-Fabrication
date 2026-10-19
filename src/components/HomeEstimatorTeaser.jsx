@@ -15,11 +15,11 @@ export default function HomeEstimatorTeaser() {
     <section className="relative overflow-hidden bg-gradient-to-br from-amber-500/10 via-amber-400/5 to-amber-600/10 py-12 sm:py-16 border-y border-amber-200/80">
       <div className="pattern-overlay absolute inset-0 opacity-15" />
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="glass-panel relative rounded-3xl border border-amber-300/70 p-8 shadow-xl lg:flex lg:items-center lg:justify-between lg:p-12">
+        <div className="glass-panel card-shine reveal-zoom relative rounded-3xl border border-amber-300/70 p-8 shadow-xl lg:flex lg:items-center lg:justify-between lg:p-12">
           
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/60 bg-amber-500/15 px-3.5 py-1 text-xs font-bold text-amber-800">
-              <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/60 bg-amber-500/15 px-3.5 py-1 text-xs font-bold text-amber-800 shadow-2xs">
+              <Sparkles className="h-3.5 w-3.5 text-amber-600 animate-pulse" />
               <span>{isMr ? "नवीन सोय: ऑनलाइन कॅल्क्युलेटर" : "New Feature: Online Estimator"}</span>
             </div>
 
@@ -37,7 +37,7 @@ export default function HomeEstimatorTeaser() {
 
             <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4">
               {features.map((feat) => (
-                <div key={feat} className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700">
+                <div key={feat} className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700 transition hover:text-amber-800">
                   <CheckCircle2 className="h-4 w-4 text-amber-600 shrink-0" />
                   <span>{feat}</span>
                 </div>
@@ -48,11 +48,11 @@ export default function HomeEstimatorTeaser() {
           <div className="mt-8 shrink-0 lg:mt-0">
             <Link
               to="/services#estimator"
-              className="pro-card inline-flex w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 px-8 py-4 text-base font-bold text-slate-950 shadow-lg hover:from-amber-400 hover:to-amber-500 sm:w-auto"
+              className="btn-interactive inline-flex w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 px-8 py-4 text-base font-bold text-slate-950 shadow-lg shadow-amber-500/25 hover:from-amber-400 hover:to-amber-500 sm:w-auto"
             >
               <Calculator className="h-5 w-5" />
               <span>{isMr ? "अंदाजपत्रक सुरू करा" : "Launch Estimator"}</span>
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
 

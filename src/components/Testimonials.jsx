@@ -50,7 +50,7 @@ export default function Testimonials() {
   return (
     <section className="bg-cream-100 py-16 sm:py-24 border-t border-amber-200/50">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 reveal-on-scroll">
           <p className="font-devanagari text-sm font-semibold text-amber-700">
             {isMr ? "🙏 भाविक व मंडळांचे अनुभव" : "Devotee & Mandir Trust Experiences"}
           </p>
@@ -65,41 +65,44 @@ export default function Testimonials() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {reviews.map((rev, index) => (
-            <div
-              key={index}
-              className="pro-card rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex text-amber-500 gap-0.5">
-                    {[...Array(rev.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  <Quote className="h-6 w-6 text-amber-200" />
-                </div>
-                <p className="font-devanagari text-sm text-slate-700 leading-relaxed mb-6 italic">
-                  "{isMr ? rev.textMr : rev.textEn}"
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+          {reviews.map((rev, index) => {
+            const delayClass = `delay-${(index + 1) * 150}`
+            return (
+              <div
+                key={index}
+                className={`pro-card card-shine reveal-on-scroll ${delayClass} rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs flex flex-col justify-between hover:border-amber-400 hover:shadow-xl group`}
+              >
                 <div>
-                  <h3 className="font-display text-sm font-bold text-slate-900">
-                    {isMr ? rev.nameMr : rev.nameEn}
-                  </h3>
-                  <p className="font-devanagari text-xs text-amber-700">
-                    {isMr ? rev.roleMr : rev.roleEn}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex text-amber-500 gap-0.5">
+                      {[...Array(rev.rating)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+                    <Quote className="h-6 w-6 text-amber-200 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12 group-hover:text-amber-400" />
+                  </div>
+                  <p className="font-devanagari text-sm text-slate-700 leading-relaxed mb-6 italic">
+                    "{isMr ? rev.textMr : rev.textEn}"
                   </p>
                 </div>
-                <div className="inline-flex items-center gap-1 text-[11px] text-slate-400 font-devanagari bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200/60">
-                  <MapPin className="h-3 w-3 text-amber-600" />
-                  <span>{isMr ? rev.locationMr : rev.locationEn}</span>
+
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <div>
+                    <h3 className="font-display text-sm font-bold text-slate-900 group-hover:text-amber-800 transition">
+                      {isMr ? rev.nameMr : rev.nameEn}
+                    </h3>
+                    <p className="font-devanagari text-xs text-amber-700">
+                      {isMr ? rev.roleMr : rev.roleEn}
+                    </p>
+                  </div>
+                  <div className="inline-flex items-center gap-1 text-[11px] text-slate-500 font-devanagari bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200/60 transition group-hover:bg-amber-50 group-hover:border-amber-200/60 group-hover:text-amber-800">
+                    <MapPin className="h-3 w-3 text-amber-600" />
+                    <span>{isMr ? rev.locationMr : rev.locationEn}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

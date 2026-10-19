@@ -39,10 +39,12 @@ export default function Owners({ showHeading = true }) {
             const displayPhone = adminOwner.phone || staticOwner?.phone
             const displayImage = adminOwner.image || staticOwner?.image
 
+            const revealClass = index === 0 ? "reveal-from-left" : "reveal-from-right"
+
             return (
               <article
                 key={displayName}
-                className="pro-card group overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:border-amber-400 hover:shadow-xl"
+                className={`pro-card card-shine ${revealClass} group overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs hover:border-amber-400 hover:shadow-2xl`}
               >
                 <div className="img-zoom-container">
                   <SiteImage
@@ -74,7 +76,7 @@ export default function Owners({ showHeading = true }) {
                     <div className="mt-6 flex flex-wrap gap-3 border-t border-slate-100 pt-5">
                       <a
                         href={`tel:${displayPhone.replace(/\s/g, "")}`}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white shadow-2xs hover:bg-amber-600 transition"
+                        className="btn-interactive inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white shadow-2xs hover:bg-amber-600"
                       >
                         <Phone className="h-3.5 w-3.5" />
                         <span>{displayPhone}</span>
@@ -83,7 +85,7 @@ export default function Owners({ showHeading = true }) {
                         href={`https://wa.me/91${displayPhone.replace(/\D/g, "")}?text=${encodeURIComponent(`नमस्कार ${displayName}, मला रथ / फॅब्रिकेशन कामाबद्दल बोलायचे आहे.`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-100 transition"
+                        className="btn-interactive inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-100"
                       >
                         <span>WhatsApp वर संपर्क</span>
                       </a>
