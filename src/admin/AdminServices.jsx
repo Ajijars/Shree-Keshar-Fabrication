@@ -76,16 +76,17 @@ export default function AdminServices() {
 
       {/* Add Service Modal */}
       {showAdd && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="font-devanagari text-lg font-bold text-gray-800">
-                नवीन सेवा जोडा <span className="text-sm font-normal text-gray-400">(Add New Service)</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4 animate-fade-in">
+          <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl bg-white p-5 sm:p-6 shadow-xl">
+            <div className="mb-4 flex items-center justify-between sticky top-0 bg-white pb-2 border-b border-gray-100">
+              <h2 className="font-devanagari text-base sm:text-lg font-bold text-gray-800">
+                नवीन सेवा जोडा <span className="text-xs sm:text-sm font-normal text-gray-400">(Add New Service)</span>
               </h2>
               <button
                 type="button"
                 onClick={() => setShowAdd(false)}
                 className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100"
+                aria-label="Close"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -330,27 +331,31 @@ export default function AdminServices() {
               </div>
             ) : (
               /* View Mode */
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex flex-1 items-start gap-4">
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+                <div className="flex flex-col sm:flex-row flex-1 items-start gap-4 w-full">
                   {service.image && (
-                    <img src={service.image} alt="" className="h-16 w-24 shrink-0 rounded-lg object-cover" />
+                    <img
+                      src={service.image}
+                      alt={service.titleMr}
+                      className="h-32 sm:h-20 w-full sm:w-28 shrink-0 rounded-xl object-cover border border-gray-100"
+                    />
                   )}
-                  <div className="flex-1">
-                    <h3 className="font-devanagari text-lg font-semibold text-maroon-900">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-devanagari text-base sm:text-lg font-bold text-maroon-900">
                       {service.titleMr}
                     </h3>
-                    <p className="text-sm text-gray-500">{service.titleEn}</p>
+                    <p className="text-xs sm:text-sm text-gray-500">{service.titleEn}</p>
 
                     {service.descMr && (
-                      <p className="font-devanagari mt-2 text-sm text-gray-600">{service.descMr}</p>
+                      <p className="font-devanagari mt-2 text-xs sm:text-sm text-gray-600 leading-relaxed">{service.descMr}</p>
                     )}
 
                     {service.price && (
-                      <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-green-50 px-4 py-1.5 text-sm font-semibold text-green-700">
+                      <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-green-50 px-3.5 py-1 text-xs sm:text-sm font-semibold text-green-700 border border-green-200/60">
                         <IndianRupee className="h-3.5 w-3.5" />
                         {service.price}
                         {service.priceNote && (
-                          <span className="ml-1 text-xs font-normal text-green-500">
+                          <span className="ml-1 text-[11px] font-normal text-green-600">
                             ({service.priceNote})
                           </span>
                         )}
@@ -359,20 +364,22 @@ export default function AdminServices() {
                   </div>
                 </div>
 
-                <div className="flex shrink-0 gap-2">
+                <div className="flex shrink-0 gap-2 self-end sm:self-start border-t sm:border-t-0 pt-3 sm:pt-0 w-full sm:w-auto justify-end border-gray-100">
                   <button
                     type="button"
                     onClick={() => setEditingId(service.id)}
-                    className="rounded-lg border border-gray-200 p-2 text-gray-400 transition hover:bg-gray-100 hover:text-maroon-800"
+                    className="flex items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-700 transition hover:bg-gray-100 hover:text-maroon-800 active:scale-95"
                   >
-                    <Edit3 className="h-4 w-4" />
+                    <Edit3 className="h-3.5 w-3.5 text-amber-700" />
+                    <span>संपादित करा</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(service.id)}
-                    className="rounded-lg border border-gray-200 p-2 text-gray-400 transition hover:bg-red-50 hover:text-red-500"
+                    className="flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50/50 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100 active:scale-95"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span>हटवा</span>
                   </button>
                 </div>
               </div>

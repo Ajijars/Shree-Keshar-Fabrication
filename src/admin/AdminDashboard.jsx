@@ -68,24 +68,24 @@ export default function AdminDashboard() {
         </p>
       </div>
 
-      {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-gray-200 bg-white p-5">
-          <p className="text-3xl font-bold text-maroon-900">{data.gallery.length}</p>
-          <p className="font-devanagari mt-1 text-sm text-gray-500">
-            गॅलरी फोटो <span className="text-xs text-gray-400">(Gallery Photos)</span>
+      {/* Stats Cards: 3 columns on mobile and desktop */}
+      <div className="grid grid-cols-3 gap-2.5 sm:gap-4">
+        <div className="rounded-2xl border border-gray-200 bg-white p-3.5 sm:p-5 text-center shadow-2xs">
+          <p className="font-display text-2xl sm:text-3xl font-extrabold text-maroon-900 leading-none">{data.gallery.length}</p>
+          <p className="font-devanagari mt-1.5 text-xs sm:text-sm font-semibold text-gray-700">
+            फोटो <span className="hidden sm:inline text-xs text-gray-400">(Photos)</span>
           </p>
         </div>
-        <div className="rounded-2xl border border-gray-200 bg-white p-5">
-          <p className="text-3xl font-bold text-maroon-900">{data.services.length}</p>
-          <p className="font-devanagari mt-1 text-sm text-gray-500">
-            सेवा <span className="text-xs text-gray-400">(Services)</span>
+        <div className="rounded-2xl border border-gray-200 bg-white p-3.5 sm:p-5 text-center shadow-2xs">
+          <p className="font-display text-2xl sm:text-3xl font-extrabold text-maroon-900 leading-none">{data.services.length}</p>
+          <p className="font-devanagari mt-1.5 text-xs sm:text-sm font-semibold text-gray-700">
+            सेवा <span className="hidden sm:inline text-xs text-gray-400">(Services)</span>
           </p>
         </div>
-        <div className="rounded-2xl border border-gray-200 bg-white p-5">
-          <p className="text-3xl font-bold text-maroon-900">2</p>
-          <p className="font-devanagari mt-1 text-sm text-gray-500">
-            मालक <span className="text-xs text-gray-400">(Owners)</span>
+        <div className="rounded-2xl border border-gray-200 bg-white p-3.5 sm:p-5 text-center shadow-2xs">
+          <p className="font-display text-2xl sm:text-3xl font-extrabold text-maroon-900 leading-none">2</p>
+          <p className="font-devanagari mt-1.5 text-xs sm:text-sm font-semibold text-gray-700">
+            मालक <span className="hidden sm:inline text-xs text-gray-400">(Owners)</span>
           </p>
         </div>
       </div>

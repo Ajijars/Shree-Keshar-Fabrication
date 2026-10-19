@@ -224,25 +224,29 @@ export default function AdminSettings() {
         </p>
 
         {showReset ? (
-          <div className="flex items-center gap-3 rounded-xl border border-red-300 bg-red-50 p-4">
-            <AlertTriangle className="h-5 w-5 shrink-0 text-red-500" />
-            <p className="font-devanagari flex-1 text-sm text-red-700">
-              खात्री आहे का? सर्व डेटा हटवला जाईल!
-            </p>
-            <button
-              type="button"
-              onClick={() => setShowReset(false)}
-              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
-            >
-              नाही (No)
-            </button>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600"
-            >
-              होय, रीसेट करा (Yes, Reset)
-            </button>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-xl border border-red-300 bg-red-50 p-4">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 shrink-0 text-red-500" />
+              <p className="font-devanagari text-xs sm:text-sm font-semibold text-red-800">
+                खात्री आहे का? सर्व डेटा हटवला जाईल! (Are you sure?)
+              </p>
+            </div>
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <button
+                type="button"
+                onClick={() => setShowReset(false)}
+                className="flex-1 sm:flex-initial rounded-lg border border-gray-300 bg-white px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-50 active:scale-95"
+              >
+                नाही (No)
+              </button>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="flex-1 sm:flex-initial rounded-lg bg-red-600 px-4 py-2 text-xs sm:text-sm font-semibold text-white hover:bg-red-700 active:scale-95 shadow-xs"
+              >
+                होय, रीसेट करा (Yes, Reset)
+              </button>
+            </div>
           </div>
         ) : (
           <button

@@ -146,11 +146,11 @@ export default function AdminGallery() {
 
       {/* Upload Modal */}
       {showUpload && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="font-devanagari text-lg font-bold text-gray-800">
-                नवीन फोटो जोडा <span className="text-sm font-normal text-gray-400">(Add New Photo)</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4 animate-fade-in">
+          <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl bg-white p-5 sm:p-6 shadow-xl">
+            <div className="mb-4 flex items-center justify-between sticky top-0 bg-white pb-2 border-b border-gray-100 z-10">
+              <h2 className="font-devanagari text-base sm:text-lg font-bold text-gray-800">
+                नवीन फोटो जोडा <span className="text-xs sm:text-sm font-normal text-gray-400">(Add New Photo)</span>
               </h2>
               <button
                 type="button"
