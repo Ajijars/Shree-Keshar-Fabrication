@@ -1,8 +1,8 @@
 export default function SectionHeading({ title, subtitle, light = false }) {
   return (
-    <div className="mx-auto mb-14 max-w-2xl text-center">
+    <div className="mx-auto mb-8 sm:mb-14 max-w-2xl text-center reveal-on-scroll">
       <h2
-        className={`font-display text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl ${
+        className={`font-display text-2xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl leading-tight ${
           light ? "text-white" : "text-slate-900"
         }`}
       >

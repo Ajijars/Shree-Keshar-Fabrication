@@ -48,29 +48,29 @@ export default function Testimonials() {
   ]
 
   return (
-    <section className="bg-cream-100 py-16 sm:py-24 border-t border-amber-200/50">
+    <section className="bg-cream-100 py-12 sm:py-20 border-t border-amber-200/50">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="text-center mb-12 reveal-on-scroll">
-          <p className="font-devanagari text-sm font-semibold text-amber-700">
+        <div className="text-center mb-10 reveal-on-scroll">
+          <p className="font-devanagari text-sm font-bold text-amber-700">
             {isMr ? "🙏 भाविक व मंडळांचे अनुभव" : "Devotee & Mandir Trust Experiences"}
           </p>
-          <h2 className="font-display mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">
+          <h2 className="font-display heading-flourish mt-2 text-2xl sm:text-4xl font-bold text-slate-900 leading-tight">
             {isMr ? "महाराष्ट्रातील वारकरी मंडळांचा विश्वास" : "Trusted by Mandals Across Maharashtra"}
           </h2>
-          <p className="font-devanagari mt-3 text-sm text-slate-600 max-w-xl mx-auto">
+          <p className="font-devanagari mt-4 text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
             {isMr
               ? "पंढरपूर, आळंदी, पुणे, नाशिक व संपूर्ण महाराष्ट्रातील भाविक आणि पालखी सोहळ्यांचा २५+ वर्षांचा अखंड विश्वास."
               : "Over 25 years of unwavering devotion and structural reliability for temple trusts and Wari yatras."}
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
           {reviews.map((rev, index) => {
             const delayClass = `delay-${(index + 1) * 150}`
             return (
               <div
                 key={index}
-                className={`pro-card card-shine reveal-on-scroll ${delayClass} rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs flex flex-col justify-between hover:border-amber-400 hover:shadow-xl group`}
+                className={`pro-card card-shine reveal-on-scroll ${delayClass} rounded-2xl sm:rounded-3xl border border-slate-200/90 bg-white p-5 sm:p-6 shadow-xs flex flex-col justify-between hover:border-amber-400 hover:shadow-xl active:scale-[0.98] transition-transform group`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">

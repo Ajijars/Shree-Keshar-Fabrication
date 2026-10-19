@@ -23,7 +23,7 @@ export default function Footer() {
   return (
     <footer className="bg-maroon-950 text-white">
       <div className="pattern-overlay border-t border-gold-500/20">
-        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+        <div className="mx-auto max-w-6xl px-4 pt-14 pb-24 sm:py-14 sm:px-6">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <div className="flex items-center gap-3">

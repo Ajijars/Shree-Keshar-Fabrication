@@ -5,6 +5,7 @@ import WhatsAppFloat from "./WhatsAppFloat"
 import ScrollToTop from "./ScrollToTop"
 import ScrollProgressBar from "./ScrollProgressBar"
 import BackToTopButton from "./BackToTopButton"
+import MobileQuickBar from "./MobileQuickBar"
 import { useScrollReveal } from "../hooks/useScrollReveal"
 
 export default function Layout() {
@@ -19,6 +20,7 @@ export default function Layout() {
       <Footer />
       <WhatsAppFloat />
       <BackToTopButton />
+      <MobileQuickBar />
     </>
   )
 }

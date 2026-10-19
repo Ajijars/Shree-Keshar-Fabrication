@@ -18,7 +18,7 @@ export default function Services({ showHeading = true }) {
   const isMr = lang === "mr"
 
   return (
-    <section className="bg-gradient-to-b from-white via-amber-50/20 to-white py-20 sm:py-28">
+    <section className="bg-gradient-to-b from-white via-amber-50/20 to-white py-12 sm:py-20 lg:py-28">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {showHeading && (
           <SectionHeading
@@ -27,7 +27,7 @@ export default function Services({ showHeading = true }) {
           />
         )}
 
-        <div className="grid gap-8 sm:grid-cols-2">
+        <div className="grid gap-5 sm:gap-8 sm:grid-cols-2">
           {services.map((service, i) => {
             const Icon = iconMap[serviceIcons[i]] || Wrench
             const title = lang === "mr" ? (service.titleMr || service.titleEn) : (service.titleEn || service.titleMr)
@@ -38,7 +38,7 @@ export default function Services({ showHeading = true }) {
             return (
               <article
                 key={service.id || title}
-                className={`pro-card card-shine reveal-on-scroll ${delayClass} group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xs hover:border-amber-400 hover:shadow-2xl`}
+                className={`pro-card card-shine reveal-on-scroll ${delayClass} group relative flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/90 bg-white shadow-xs hover:border-amber-400 hover:shadow-2xl active:scale-[0.99] transition-transform`}
               >
                 <div>
                   {service.image ? (
@@ -51,21 +51,21 @@ export default function Services({ showHeading = true }) {
                     </div>
                   ) : null}
                   
-                  <div className="p-7">
+                  <div className="p-5 sm:p-7">
                     {!service.image && (
-                      <div className="mb-5 inline-flex rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/80 p-3.5 text-amber-800 border border-amber-200/50 shadow-2xs group-hover:scale-110 group-hover:rotate-6 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
-                        <Icon className="h-6 w-6" />
+                      <div className="mb-4 sm:mb-5 inline-flex rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/80 p-3 sm:p-3.5 text-amber-800 border border-amber-200/50 shadow-2xs group-hover:scale-110 group-hover:rotate-6 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
+                        <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                       </div>
                     )}
 
-                    <h3 className="font-display text-2xl font-bold text-slate-900 group-hover:text-amber-800 transition">
+                    <h3 className="font-display text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-amber-800 transition">
                       {title}
                     </h3>
-                    <p className="font-devanagari mt-3 text-sm leading-relaxed text-slate-600">{desc}</p>
+                    <p className="font-devanagari mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-slate-600">{desc}</p>
                     
                     {service.price && (
-                      <div className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-4 py-1.5 text-xs sm:text-sm font-bold text-emerald-800 border border-emerald-200/60 shadow-2xs">
-                        <IndianRupee className="h-4 w-4" />
+                      <div className="mt-4 sm:mt-5 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3.5 py-1.5 text-xs sm:text-sm font-bold text-emerald-800 border border-emerald-200/60 shadow-2xs">
+                        <IndianRupee className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         <span>{service.price}</span>
                         {service.priceNote && (
                           <span className="text-xs font-normal text-emerald-700">
@@ -77,14 +77,14 @@ export default function Services({ showHeading = true }) {
                   </div>
                 </div>
 
-                <div className="border-t border-slate-100 p-5 bg-slate-50/50 flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-500">
+                <div className="border-t border-slate-100 p-4 sm:p-5 bg-slate-50/50 flex items-center justify-between gap-2">
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-500">
                     {isMr ? "कस्टम निर्मिती उपलब्ध" : "Custom Fabrication Available"}
                   </span>
 
                   <Link
                     to="/contact"
-                    className="btn-interactive inline-flex items-center gap-1.5 rounded-full bg-amber-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-amber-400 shadow-2xs"
+                    className="btn-interactive inline-flex items-center gap-1.5 rounded-full bg-amber-500 px-3.5 py-2 sm:px-4 text-xs font-bold text-slate-950 hover:bg-amber-400 shadow-2xs shrink-0 active:scale-95"
                   >
                     <MessageSquareQuote className="h-3.5 w-3.5" />
                     <span>{isMr ? "चौकशी करा" : "Request Quote"}</span>

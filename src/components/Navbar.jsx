@@ -88,17 +88,17 @@ export default function Navbar() {
           <LanguageSwitcher compact />
           <button
             type="button"
-            className="rounded-lg p-2 text-slate-700 hover:bg-slate-100 transition"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-800 shadow-2xs hover:bg-amber-50 hover:text-amber-700 transition active:scale-95"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {open ? <X className="h-6 w-6 text-amber-700" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
       </nav>
 
       {open && (
-        <div className="border-t border-slate-200/80 bg-white/98 px-4 py-4 shadow-xl backdrop-blur-xl lg:hidden animate-fade-up">
+        <div className="border-t border-slate-200/90 bg-white/98 px-5 py-5 shadow-2xl backdrop-blur-2xl lg:hidden animate-fade-up">
           <ul className="flex flex-col gap-1.5">
             {navRoutes.map((link) => (
               <li key={link.path}>
@@ -107,13 +107,26 @@ export default function Navbar() {
                 </NavLink>
               </li>
             ))}
-            <li className="pt-2">
+            
+            {/* Quick Action Button */}
+            <li className="pt-3">
               <Link
                 to="/contact"
-                className="block rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-3 text-center text-sm font-bold text-slate-950 shadow-sm"
+                className="btn-interactive flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-3 text-center text-sm font-bold text-slate-950 shadow-md shadow-amber-500/20 active:scale-95"
               >
-                {t("nav.getQuote")}
+                <Phone className="h-4 w-4" />
+                <span>{t("nav.getQuote")}</span>
               </Link>
+            </li>
+
+            {/* Quick Contact Info Strip */}
+            <li className="mt-3 rounded-xl border border-amber-200/60 bg-amber-50/70 p-3 text-center">
+              <p className="font-devanagari text-xs font-semibold text-slate-800">
+                {t("business.name")}
+              </p>
+              <p className="mt-1 text-[11px] font-medium text-amber-800">
+                📞 +91 98226 63659 • 📍 संपूर्ण महाराष्ट्र सेवा
+              </p>
             </li>
           </ul>
         </div>
