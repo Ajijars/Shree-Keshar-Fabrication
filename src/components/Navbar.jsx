@@ -3,12 +3,16 @@ import { Link, NavLink, useLocation } from "react-router-dom"
 import { Menu, X, Phone } from "lucide-react"
 import { useTranslation, navRoutes } from "../i18n/LanguageContext"
 import LanguageSwitcher from "./LanguageSwitcher"
+import { useAdminData } from "../admin/AdminContext"
+import { siteData } from "../data/siteData"
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { pathname } = useLocation()
   const { t } = useTranslation()
+  const adminData = useAdminData()
+  const phone = adminData.contact?.phone || adminData.contact?.phone1 || siteData.contact.phone
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -125,7 +129,7 @@ export default function Navbar() {
                 {t("business.name")}
               </p>
               <p className="mt-1 text-[11px] font-medium text-amber-800">
-                📞 +91 98226 63659 • 📍 संपूर्ण महाराष्ट्र सेवा
+                📞 {phone} • 📍 संपूर्ण महाराष्ट्र सेवा
               </p>
             </li>
           </ul>

@@ -60,6 +60,7 @@ const defaultData = {
     },
   ],
   contact: {
+    phone: "+91 96993 71940",
     phone1: "+91 96993 71940",
     phone2: "+91 96993 71940",
     email: "shreekesharfabrication@gmail.com",
@@ -474,10 +475,12 @@ export function AdminProvider({ children }) {
 
   // Contact operations
   const updateContact = useCallback((updates) => {
-    setData((prev) => ({
-      ...prev,
-      contact: { ...prev.contact, ...updates },
-    }))
+    setData((prev) => {
+      const merged = { ...prev.contact, ...updates }
+      if (updates.phone && !updates.phone1) merged.phone1 = updates.phone
+      if (updates.phone1 && !updates.phone) merged.phone = updates.phone1
+      return { ...prev, contact: merged }
+    })
   }, [])
 
   // Hero operations

@@ -56,7 +56,7 @@ export default function AdminContact() {
               value={data.owners.prabhakar?.phone || ""}
               onChange={(e) => handleOwnerChange("prabhakar", "phone", e.target.value)}
               onBlur={handleSave}
-              placeholder="+91 98765 43210"
+              placeholder="+91 96993 71940"
               className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none transition focus:border-maroon-800 focus:ring-2 focus:ring-maroon-800/20"
             />
           </div>
