@@ -82,7 +82,9 @@ export default function Owners({ showHeading = true }) {
                         <span>{displayPhone}</span>
                       </a>
                       <a
-                        href={`https://wa.me/91${displayPhone.replace(/\D/g, "")}?text=${encodeURIComponent(`नमस्कार ${displayName}, मला रथ / फॅब्रिकेशन कामाबद्दल बोलायचे आहे.`)}`}
+                        href={`https://wa.me/${displayPhone.replace(/\D/g, "").replace(/^9191/, "91").replace(/^(\d{10})$/, "91$1")}?text=${encodeURIComponent(
+                          `नमस्कार ${displayName}, मला रथ / फॅब्रिकेशन कामाबद्दल माहिती हवी आहे.`
+                        )}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn-interactive inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-100"

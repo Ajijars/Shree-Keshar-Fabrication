@@ -106,10 +106,19 @@ function loadLocalData() {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       const parsed = JSON.parse(stored)
-      const gallery =
-        Array.isArray(parsed.gallery) && parsed.gallery.length > 0
-          ? parsed.gallery
-          : DEFAULT_GALLERY_PHOTOS
+      let gallery = DEFAULT_GALLERY_PHOTOS
+      if (Array.isArray(parsed.gallery) && parsed.gallery.length > 0) {
+        const validPhotos = parsed.gallery.filter(
+          (img) => img && img.src && !img.src.includes("test.png")
+        )
+        if (validPhotos.length >= 16) {
+          gallery = validPhotos
+        } else if (validPhotos.length > 0) {
+          const customSet = new Set(validPhotos.map((p) => p.src))
+          const missingDefaults = DEFAULT_GALLERY_PHOTOS.filter((dp) => !customSet.has(dp.src))
+          gallery = [...validPhotos, ...missingDefaults]
+        }
+      }
       return { ...defaultData, ...parsed, gallery }
     }
   } catch {
@@ -171,10 +180,19 @@ export function AdminProvider({ children }) {
           const json = await res.json()
           if (json.data && isMounted) {
             setData((prev) => {
-              const remoteGallery =
-                Array.isArray(json.data.gallery) && json.data.gallery.length > 0
-                  ? json.data.gallery
-                  : (prev.gallery && prev.gallery.length > 0 ? prev.gallery : DEFAULT_GALLERY_PHOTOS)
+              let remoteGallery = DEFAULT_GALLERY_PHOTOS
+              if (Array.isArray(json.data.gallery) && json.data.gallery.length > 0) {
+                const validPhotos = json.data.gallery.filter(
+                  (img) => img && img.src && !img.src.includes("test.png")
+                )
+                if (validPhotos.length >= 16) {
+                  remoteGallery = validPhotos
+                } else if (validPhotos.length > 0) {
+                  const customSet = new Set(validPhotos.map((p) => p.src))
+                  const missingDefaults = DEFAULT_GALLERY_PHOTOS.filter((dp) => !customSet.has(dp.src))
+                  remoteGallery = [...validPhotos, ...missingDefaults]
+                }
+              }
               return {
                 ...defaultData,
                 ...prev,
@@ -208,7 +226,7 @@ export function AdminProvider({ children }) {
     if (isAuthenticated) {
       const timeout = setTimeout(async () => {
         try {
-          await fetch(API_BASE, {
+          await fetch(`${API_BASE}/data`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
