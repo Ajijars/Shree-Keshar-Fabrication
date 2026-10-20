@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Send, CheckCircle, Phone, Mail, MapPin, ExternalLink } from "lucide-react"
+import { Send, CheckCircle, Phone, Mail, MapPin } from "lucide-react"
 import { siteData } from "../data/siteData"
 import { useTranslation } from "../i18n/LanguageContext"
 import { useAdminData } from "../admin/AdminContext"
