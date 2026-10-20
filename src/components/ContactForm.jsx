@@ -1,7 +1,8 @@
 import { useState } from "react"
-import { Send, CheckCircle, Phone, Mail, MapPin } from "lucide-react"
+import { Send, CheckCircle, Phone, Mail, MapPin, ExternalLink } from "lucide-react"
 import { siteData } from "../data/siteData"
 import { useTranslation } from "../i18n/LanguageContext"
+import { useAdminData } from "../admin/AdminContext"
 import SectionHeading from "./SectionHeading"
 
 const initialForm = {
@@ -25,6 +26,17 @@ export default function ContactForm({ showHeading = true }) {
   const cityOptions = t("contact.cityOptions")
   const serviceOptions = t("contact.serviceOptions")
   const owners = t("owners.items")
+  const adminData = useAdminData()
+
+  const phonePrabhakar = adminData.owners?.prabhakar?.phone || siteData.owners.prabhakar.phone
+  const phoneHarsh = adminData.owners?.harsh?.phone || siteData.owners.harsh.phone
+  const contactEmail = adminData.contact?.email || siteData.contact.email
+  const contactAddress = adminData.contact?.address || siteData.contact.address
+  const mapLink = adminData.contact?.mapLink || siteData.contact.mapLink
+  const mapUrl =
+    mapLink && mapLink !== "#" && (mapLink.startsWith("http://") || mapLink.startsWith("https://"))
+      ? mapLink
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Shree Keshar Fabrication Works, " + (contactAddress || "Maharashtra"))}`
 
   const sanitizeInput = (val, maxLen = 200) => {
     if (typeof val !== "string") return ""
@@ -156,12 +168,13 @@ export default function ContactForm({ showHeading = true }) {
                     <Phone className="h-4 w-4 shrink-0" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400">{owners[0].name}</p>
+                    <p className="text-xs text-slate-400">{owners[0]?.name || "श्री. प्रभाकर म्हसके"}</p>
                     <a
-                      href={`tel:${siteData.owners.prabhakar.phone.replace(/\s/g, "")}`}
+                      href={`tel:${phonePrabhakar.replace(/\s/g, "")}`}
                       className="text-sm font-semibold text-white hover:text-amber-400 transition"
+                      title="कॉल करा (Call Prabhakar Mhaske)"
                     >
-                      {siteData.owners.prabhakar.phone}
+                      {phonePrabhakar}
                     </a>
                   </div>
                 </li>
@@ -170,12 +183,13 @@ export default function ContactForm({ showHeading = true }) {
                     <Phone className="h-4 w-4 shrink-0" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400">{owners[1].name}</p>
+                    <p className="text-xs text-slate-400">{owners[1]?.name || "श्री. हर्ष म्हसके"}</p>
                     <a
-                      href={`tel:${siteData.owners.harsh.phone.replace(/\s/g, "")}`}
+                      href={`tel:${phoneHarsh.replace(/\s/g, "")}`}
                       className="text-sm font-semibold text-white hover:text-amber-400 transition"
+                      title="कॉल करा (Call Harsh Mhaske)"
                     >
-                      {siteData.owners.harsh.phone}
+                      {phoneHarsh}
                     </a>
                   </div>
                 </li>
@@ -185,8 +199,12 @@ export default function ContactForm({ showHeading = true }) {
                   </div>
                   <div>
                     <p className="text-xs text-slate-400">ईमेल (Email)</p>
-                    <a href={`mailto:${siteData.contact.email}`} className="text-sm text-slate-200 hover:text-amber-400 transition">
-                      {siteData.contact.email}
+                    <a
+                      href={`mailto:${contactEmail}`}
+                      className="text-sm text-slate-200 hover:text-amber-400 transition break-all"
+                      title="ईमेल पाठवा (Send Email)"
+                    >
+                      {contactEmail}
                     </a>
                   </div>
                 </li>
@@ -194,9 +212,22 @@ export default function ContactForm({ showHeading = true }) {
                   <div className="mt-0.5 rounded-xl bg-amber-500/20 p-2 text-amber-400">
                     <MapPin className="h-4 w-4 shrink-0" />
                   </div>
-                  <div>
-                    <p className="text-xs text-slate-400">पत्ता (Workshop)</p>
-                    <p className="text-sm text-slate-200">{siteData.contact.address}</p>
+                  <div className="flex-1">
+                    <p className="text-xs text-slate-400">पत्ता (Workshop Location)</p>
+                    <a
+                      href={mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group mt-1 flex flex-col rounded-xl border border-amber-400/30 bg-white/5 p-2.5 transition hover:border-amber-400 hover:bg-amber-500/10"
+                      title="Google Maps वर उघडा (Open in Google Maps)"
+                    >
+                      <span className="text-sm font-medium text-slate-100 group-hover:text-amber-300">
+                        {contactAddress}
+                      </span>
+                      <span className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-amber-400 group-hover:text-amber-300">
+                        📍 Google Maps वर उघडा (Get Directions) ↗
+                      </span>
+                    </a>
                   </div>
                 </li>
               </ul>

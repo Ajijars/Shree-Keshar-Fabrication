@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>श्री केशर फॅब्रिकेशन वर्क्स — Workshop Banner (30" × 12')</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rozha+One&family=Yantramanav:wght@700;800;900&family=Tiro+Devanagari+Marathi:wght@400;700&family=Poppins:wght@500;600;700;800;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --saffron-deep: #D84315;
+      --saffron: #FF6F00;
+      --saffron-bright: #FF8F00;
+      --saffron-glow: #FFA726;
+      --gold: #FFD54F;
+      --gold-bright: #FFE082;
+      --gold-dark: #FFB300;
+      --deep-navy: #070D2D;
+      --navy-mid: #0D1B5E;
+      --navy-card: #112275;
+      --card-border: rgba(255, 213, 79, 0.45);
+      --cream: #FFF9E6;
+      --white: #FFFFFF;
+    }
+
+    body {
+      background: #141419;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px;
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      color: var(--white);
+    }
+
+    /* Floating control bar */
+    .controls {
+      position: sticky;
+      top: 8px;
+      z-index: 9999;
+      background: rgba(10, 14, 30, 0.94);
+      padding: 10px 20px;
+      border-radius: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 179, 0, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .controls .title-badge {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+      padding-right: 10px;
+      border-right: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .controls button {
+      background: linear-gradient(135deg, var(--saffron), var(--saffron-deep));
+      color: white;
+      border: 1px solid rgba(255, 213, 79, 0.3);
+      padding: 7px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .controls button:hover {
+      background: linear-gradient(135deg, var(--gold-dark), var(--saffron));
+      transform: translateY(-1px);
+    }
+
+    .controls button.active {
+      background: linear-gradient(135deg, #FFB300, #E65100);
+      border-color: #FFE082;
+      box-shadow: 0 0 12px rgba(255, 179, 0, 0.6);
+    }
+
+    .controls .print-btn {
+      background: linear-gradient(135deg, #2E7D32, #1B5E20);
+      border-color: #81C784;
+      margin-left: 6px;
+    }
+    .controls .print-btn:hover {
+      background: linear-gradient(135deg, #388E3C, #2E7D32);
+    }
+
+    /* Banner Container Wrapper */
+    .banner-wrapper {
+      overflow: hidden;
+      border: 3px solid rgba(255, 179, 0, 0.5);
+      border-radius: 6px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 111, 0, 0.2);
+      background: #000;
+    }
+
+    /* Actual Canvas: 4800px × 1000px (4.8 : 1 ratio for 12ft × 30inch) */
+    .banner {
+      width: 4800px;
+      height: 1000px;
+      background: radial-gradient(ellipse at 50% 25%, #13247a 0%, #0a1348 45%, #050a25 100%);
+      position: relative;
+      overflow: hidden;
+      font-family: 'Tiro Devanagari Marathi', serif;
+      transform-origin: top left;
+    }
+
+    /* Ambient background glows & texture */
+    .banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 25%, rgba(255, 111, 0, 0.2) 0%, transparent 35%),
+        radial-gradient(circle at 90% 25%, rgba(255, 111, 0, 0.2) 0%, transparent 35%),
+        radial-gradient(circle at 50% 15%, rgba(255, 213, 79, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 50% 85%, rgba(255, 111, 0, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Subtle geometric grid texture */
+    .banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 213, 79, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 213, 79, 0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ====== DECORATIVE BORDERS ====== */
+    .border-band {
+      position: absolute;
+      left: 0; right: 0;
+      height: 24px;
+      background: linear-gradient(90deg,
+        #BF360C, var(--saffron), #FFD54F, #FF8F00, #FFD54F, #FF6F00,
+        #FFD54F, #FF8F00, #FFD54F, var(--saffron), #BF360C);
+      z-index: 10;
+      box-shadow: 0 0 15px rgba(255, 179, 0, 0.4);
+    }
+    .border-band.top { top: 0; }
+    .border-band.bottom { bottom: 0; }
+
+    .border-band .om-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      height: 100%;
+      color: #050a25;
+      font-size: 14px;
+      font-weight: 900;
+      opacity: 0.55;
+    }
+
+    .inner-line {
+      position: absolute;
+      left: 20px; right: 20px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), #FFF, var(--gold), transparent);
+      z-index: 10;
+      opacity: 0.6;
+    }
+    .inner-line.top { top: 30px; }
+    .inner-line.bottom { bottom: 30px; }
+
+    /* Corner ornamental accents */
+    .corner {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      z-index: 10;
+      opacity: 0.6;
+    }
+    .corner.tl { top: 28px; left: 16px; border-top: 3px solid var(--gold); border-left: 3px solid var(--gold); border-top-left-radius: 12px; }
+    .corner.tr { top: 28px; right: 16px; border-top: 3px solid var(--gold); border-right: 3px solid var(--gold); border-top-right-radius: 12px; }
+    .corner.bl { bottom: 28px; left: 16px; border-bottom: 3px solid var(--gold); border-left: 3px solid var(--gold); border-bottom-left-radius: 12px; }
+    .corner.br { bottom: 28px; right: 16px; border-bottom: 3px solid var(--gold); border-right: 3px solid var(--gold); border-bottom-right-radius: 12px; }
+
+    /* ====== TOP DEVOTIONAL & LOCATION STRIP ====== */
+    .top-strip {
+      position: absolute;
+      top: 30px;
+      left: 80px;
+      right: 80px;
+      height: 38px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 213, 79, 0.25);
+      padding: 0 30px;
+    }
+
+    .top-strip .invocations {
+      font-size: 20px;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    .top-strip .service-coverage {
+      font-size: 17px;
+      color: var(--cream);
+      opacity: 0.9;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .top-strip .service-coverage span {
+      color: var(--saffron-glow);
+      margin: 0 6px;
+    }
+
+    /* ====== BOTTOM FOOTER STRIP ====== */
+    .bottom-strip {
+      position: absolute;
+      bottom: 28px;
+      left: 80px;
+      right: 80px;
+      height: 34px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 213, 79, 0.25);
+      padding: 0 30px;
+    }
+
+    .bottom-strip .chant {
+      font-size: 18px;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+
+    .bottom-strip .address-line {
+      font-size: 18px;
+      color: #FFFFFF;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .bottom-strip .address-line b {
+      color: var(--gold);
+    }
+
+    /* ====== MAIN HERO SECTION ====== */
+    .main-layout {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 72px 50px 65px;
+      justify-content: space-between;
+    }
+
+    /* TOP ZONE: The Massive Shop Hero Header */
+    .hero-zone {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      width: 100%;
+      padding: 5px 10px;
+    }
+
+    /* Left: Grand Circular Logo */
+    .logo-box {
+      flex: 0 0 340px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo-circle {
+      width: 310px;
+      height: 310px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 8px solid var(--gold);
+      box-shadow:
+        0 0 40px rgba(255, 213, 79, 0.5),
+        0 0 80px rgba(255, 111, 0, 0.35),
+        inset 0 0 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .logo-circle::after {
+      content: '';
+      position: absolute;
+      inset: -14px;
+      border-radius: 50%;
+      border: 2px dashed rgba(255, 213, 79, 0.5);
+      animation: rotate 60s linear infinite;
+    }
+
+    .logo-img {
+      width: 95%;
+      height: 95%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .logo-caption {
+      font-size: 16px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-top: 10px;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    }
+
+    /* Center: MASSIVE SHOP NAME & CREDENTIALS */
+    .hero-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    /* THE HERO SHOP NAME - HUGE & COMMANDING */
+    .shop-name-marathi {
+      font-size: 215px;
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: 4px;
+      margin-bottom: 2px;
+      font-family: 'Rozha One', 'Yantramanav', 'Tiro Devanagari Marathi', serif;
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFF3C4 20%, #FFD54F 52%, #FF8F00 80%, #D84315 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 45px rgba(255, 179, 0, 0.55));
+      text-transform: none;
+      white-space: nowrap;
+    }
+
+    /* English Subtitle */
+    .shop-name-english {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 16px;
+      text-transform: uppercase;
+      font-family: 'Poppins', sans-serif;
+      margin-bottom: 12px;
+      text-shadow: 0 3px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 213, 79, 0.4);
+    }
+
+    /* Specialty Ribbon */
+    .specialty-ribbon {
+      background: linear-gradient(90deg,
+        transparent,
+        rgba(216, 67, 21, 0.95) 10%,
+        rgba(255, 111, 0, 0.98) 50%,
+        rgba(216, 67, 21, 0.95) 90%,
+        transparent);
+      border-top: 2.5px solid var(--gold);
+      border-bottom: 2.5px solid var(--gold);
+      padding: 10px 80px;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      margin-top: 2px;
+    }
+
+    .specialty-ribbon span {
+      font-size: 28px;
+      color: #FFFFFF;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    }
+    .specialty-ribbon .flag {
+      color: var(--gold);
+      font-size: 26px;
+      margin: 0 12px;
+    }
+
+    /* Right: QR Code & Trust Seals */
+    .hero-right {
+      flex: 0 0 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .qr-badge-box {
+      background: linear-gradient(145deg, rgba(17, 34, 117, 0.95), rgba(7, 13, 45, 0.98));
+      border: 3px solid var(--gold);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 213, 79, 0.3);
+    }
+
+    .qr-badge-box .qr-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .qr-img {
+      width: 175px;
+      height: 175px;
+      border-radius: 10px;
+      border: 3px solid #FFF;
+      background: #FFF;
+      object-fit: contain;
+      padding: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .qr-badge-box .qr-url {
+      font-size: 15px;
+      color: #FFFFFF;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .trust-pill {
+      margin-top: 10px;
+      background: linear-gradient(90deg, #E65100, #FF8F00);
+      color: #FFF;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gold);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      letter-spacing: 1px;
+    }
+
+    /* ====== BOTTOM ZONE: 4 HIGH-IMPACT POWER CARDS ====== */
+    .cards-zone {
+      display: grid;
+      grid-template-columns: 1.35fr 1.35fr 1.45fr 1.25fr;
+      gap: 22px;
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .power-card {
+      background: linear-gradient(145deg, rgba(17, 34, 117, 0.94), rgba(8, 15, 55, 0.98));
+      border: 2px solid var(--card-border);
+      border-radius: 18px;
+      padding: 24px 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 213, 79, 0.35);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .power-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+      border-bottom: 1.5px solid rgba(255, 213, 79, 0.25);
+      padding-bottom: 10px;
+    }
+
+    .card-icon {
+      font-size: 56px;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1.15;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-body {
+      font-size: 23px;
+      color: #FFFFFF;
+      line-height: 1.42;
+      font-weight: 500;
+      margin-bottom: 14px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag-item {
+      background: rgba(255, 111, 0, 0.28);
+      border: 1.5px solid rgba(255, 213, 79, 0.45);
+      color: var(--gold-bright);
+      font-size: 18px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 8px;
+    }
+
+    /* Card 3: CONTACT CARD - EXTRA EMPHASIS */
+    .power-card.contact-card {
+      background: linear-gradient(145deg, rgba(25, 45, 145, 0.95), rgba(12, 20, 75, 0.98));
+      border: 3px solid var(--gold);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 179, 0, 0.25);
+    }
+
+    .contact-phone-box {
+      background: linear-gradient(90deg, #B71C1C, #E65100, #F57C00);
+      border: 2px solid #FFE082;
+      border-radius: 12px;
+      padding: 12px 20px;
+      text-align: center;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    .phone-number {
+      font-size: 52px;
+      font-weight: 900;
+      color: #FFFFFF;
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 1px;
+      line-height: 1;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+
+    .phone-sub {
+      font-size: 18px;
+      color: var(--gold-bright);
+      font-weight: 700;
+      margin-top: 5px;
+      letter-spacing: 2px;
+    }
+
+    .contact-sub-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 18px;
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+    .contact-sub-lines span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .contact-sub-lines .icon { font-size: 20px; }
+
+    /* Card 4: PROPRIETOR & STATS */
+    .owners-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .owner-row {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+    }
+
+    .owner-row .name {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--gold);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    }
+    .owner-row .role {
+      font-size: 16px;
+      color: var(--cream);
+      opacity: 0.85;
+      font-weight: 600;
+    }
+
+    .stats-deck {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1.5px solid rgba(255, 213, 79, 0.35);
+      padding-top: 10px;
+      margin-top: 4px;
+    }
+
+    .stat-pill {
+      text-align: center;
+    }
+    .stat-pill .num {
+      font-size: 38px;
+      font-weight: 900;
+      color: #FFFFFF;
+      font-family: 'Poppins', sans-serif;
+      line-height: 1;
+      text-shadow: 0 0 14px rgba(255, 213, 79, 0.5);
+    }
+    .stat-pill .lbl {
+      font-size: 15px;
+      color: var(--saffron-glow);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* ====== PRINT SPECIFICATIONS ====== */
+    @media print {
+      body {
+        background: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .controls { display: none !important; }
+      .banner-wrapper {
+        border: none !important;
+        box-shadow: none !important;
+        width: 144in !important;
+        height: 30in !important;
+      }
+      .banner {
+        transform: none !important;
+        width: 144in !important;
+        height: 30in !important;
+      }
+      @page {
+        size: 144in 30in;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Scale & Print Controls -->
+  <div class="controls">
+    <div class="title-badge">श्री केशर फॅब्रिकेशन — 30" × 12' Workshop Banner</div>
+    <button onclick="setScale('fit')" class="active" id="btn-fit">🎯 संपूर्ण बॅनर (Fit Viewport)</button>
+    <button onclick="setScale(0.18)" id="btn-sm">छोटा</button>
+    <button onclick="setScale(0.26)" id="btn-md">मध्यम</button>
+    <button onclick="setScale(0.38)" id="btn-lg">मोठा</button>
+    <button onclick="setScale(0.55)" id="btn-xl">अतिमोठा</button>
+    <button onclick="window.print()" class="print-btn">🖨️ Print / Save PDF (144" × 30")</button>
+  </div>
+
+  <!-- Sized Wrapper -->
+  <div class="banner-wrapper" id="wrapper">
+    <div class="banner" id="banner">
+
+      <!-- Top Border Band -->
+      <div class="border-band top">
+        <div class="om-row">
+          <span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span>
+          <span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span>
+          <span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span>
+          <span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span>
+        </div>
+      </div>
+
+      <!-- Bottom Border Band -->
+      <div class="border-band bottom">
+        <div class="om-row">
+          <span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span>
+          <span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span>
+          <span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span>
+          <span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span><span>ॐ</span>
+        </div>
+      </div>
+
+      <!-- Gold Inner Lines -->
+      <div class="inner-line top"></div>
+      <div class="inner-line bottom"></div>
+
+      <!-- Ornamental Corners -->
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+
+      <!-- Top Auspicious & Locations Strip -->
+      <div class="top-strip">
+        <div class="invocations">
+          ॥ श्री गणेशाय नमः ॥ &nbsp; ॥ श्री विठ्ठल रखुमाई प्रसन्न ॥ &nbsp; ॥ हर हर महादेव ॥
+        </div>
+        <div class="service-coverage">
+          📍 कार्यक्षेत्र: पुणे <span>◈</span> आळंदी <span>◈</span> पंढरपूर <span>◈</span> मुंबई <span>◈</span> नाशिक <span>◈</span> सातारा <span>◈</span> कोल्हापूर <span>◈</span> संपूर्ण महाराष्ट्र
+        </div>
+      </div>
+
+      <!-- Bottom Devotional & Workshop Info Strip -->
+      <div class="bottom-strip">
+        <div class="chant">
+          🚩 ॥ जय जय राम कृष्ण हरी · विठ्ठल विठ्ठल जय हरी विठ्ठल · पंढरीचा वारकरी ॥ 🚩
+        </div>
+        <div class="address-line">
+          🏢 <b>वर्कशॉप:</b> श्री केशर फॅब्रिकेशन वर्क्स · <b>वेबसाइट:</b> shreekesharfabrication.com · <b>ईमेल:</b> shreekesharfabrication@gmail.com
+        </div>
+      </div>
+
+      <!-- ====== MAIN CONTENT LAYOUT ====== -->
+      <div class="main-layout">
+
+        <!-- HERO ZONE: Logo + HUGE Shop Name + QR & Trust -->
+        <div class="hero-zone">
+
+          <!-- Left: Grand Rath Logo -->
+          <div class="logo-box">
+            <div class="logo-circle">
+              <img src="public/images/logo.png"
+                   onerror="this.onerror=null; this.src='images/logo.png';"
+                   alt="श्री केशर फॅब्रिकेशन लोगो"
+                   class="logo-img">
+            </div>
+            <div class="logo-caption">॥ स्थापित १९९९ ॥</div>
+          </div>
+
+          <!-- Center: MASSIVE SHOP TITLE (Dominates the banner!) -->
+          <div class="hero-center">
+            <h1 class="shop-name-marathi">श्री केशर फॅब्रिकेशन वर्क्स</h1>
+            <div class="shop-name-english">SHREE KESHAR FABRICATION WORKS</div>
+            <div class="specialty-ribbon">
+              <span>
+                <span class="flag">🚩</span>
+                विठ्ठल दिंडी पालखी व भव्य रथ निर्मितीचे विश्वसनीय केंद्र · सर्व प्रकारचे लोखंडी व स्टील फॅब्रिकेशन कामे
+                <span class="flag">🚩</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Right: Branded QR & Trust Badge -->
+          <div class="hero-right">
+            <div class="qr-badge-box">
+              <div class="qr-title">📱 स्कॅन करा व रथांचे फोटो पहा</div>
+              <img src="public/images/qr-branded.jpg"
+                   onerror="this.onerror=null; this.src='images/qr-branded.jpg';"
+                   alt="QR Code — Shree Keshar Fabrication"
+                   class="qr-img">
+              <div class="qr-url">🌐 shreekesharfabrication.com</div>
+            </div>
+            <div class="trust-pill">★ २५+ वर्षांचा सुवर्ण अनुभव ★</div>
+          </div>
+
+        </div>
+
+        <!-- BOTTOM ZONE: 4 HIGH-IMPACT POWER CARDS -->
+        <div class="cards-zone">
+
+          <!-- Card 1: Rath Nirman -->
+          <div class="power-card">
+            <div>
+              <div class="card-head">
+                <span class="card-icon">🛕</span>
+                <div class="card-title">भव्य रथ निर्मिती<br><span style="font-size:16px; color:var(--cream); opacity:0.8; font-weight:600;">(नवीन रथ बांधकाम)</span></div>
+              </div>
+              <div class="card-body">
+                विठ्ठल दिंडी, पायी यात्रा, धार्मिक उत्सव व भक्ती मिरवणुकीसाठी मजबूत, आकर्षक व भव्य रथांचे संपूर्ण डिझाइन व बांधकाम.
+              </div>
+            </div>
+            <div class="card-tags">
+              <span class="tag-item">सागवानी/स्टील फ्रेम</span>
+              <span class="tag-item">नक्षीदार छत्र</span>
+              <span class="tag-item">मजबूत चाक रचना</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Rath Repair & Maintenance -->
+          <div class="power-card">
+            <div>
+              <div class="card-head">
+                <span class="card-icon">🔧</span>
+                <div class="card-title">रथ दुरुस्ती व नूतनीकरण<br><span style="font-size:16px; color:var(--cream); opacity:0.8; font-weight:600;">(Reconditioning & Repair)</span></div>
+              </div>
+              <div class="card-body">
+                जुन्या रथांचे संपूर्ण स्ट्रक्चरल काम, व्हील बेअरिंग, ब्रेक सिस्टम, रंगकाम, सजावट नूतनीकरण — यात्रेपूर्वी वेळेत पूर्ण.
+              </div>
+            </div>
+            <div class="card-tags">
+              <span class="tag-item">इमर्जन्सी रिपेअर</span>
+              <span class="tag-item">स्टील मजबुतीकरण</span>
+              <span class="tag-item">पुनर्नूतनीकरण</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Steel & Metal Fabrication -->
+          <div class="power-card">
+            <div>
+              <div class="card-head">
+                <span class="card-icon">⚙️</span>
+                <div class="card-title">लोखंडी व स्टील फॅब्रिकेशन<br><span style="font-size:16px; color:var(--cream); opacity:0.8; font-weight:600;">(औद्योगिक व घरगुती कामे)</span></div>
+              </div>
+              <div class="card-body">
+                एस.एस. रेलिंग, आकर्षक मेन गेट, इंडस्ट्रियल शेड, चॅनेल गेट, खिडकी ग्रिल व सर्व प्रकारचे हेवी मेटल फॅब्रिकेशन कामे.
+              </div>
+            </div>
+            <div class="card-tags">
+              <span class="tag-item">एस.एस. रेलिंग</span>
+              <span class="tag-item">आकर्षक मेन गेट</span>
+              <span class="tag-item">रूफिंग शेड</span>
+            </div>
+          </div>
+
+          <!-- Card 4: CONTACT & PROPRIETORS (High visibility!) -->
+          <div class="power-card contact-card">
+            <div>
+              <!-- Big Phone Callout -->
+              <div class="contact-phone-box">
+                <div class="phone-number">📞 96993 71940</div>
+                <div class="phone-sub">कॉल / WhatsApp · थेट संपर्क</div>
+              </div>
+
+              <!-- Proprietors -->
+              <div class="owners-list">
+                <div class="owner-row">
+                  <span class="name">श्री. प्रभाकर म्हसके</span>
+                  <span class="role">संस्थापक (मो. ९६९९३ ७१९४०)</span>
+                </div>
+                <div class="owner-row">
+                  <span class="name">श्री. हर्ष म्हसके</span>
+                  <span class="role">सह-मालक (फॅब्रिकेशन एक्स्पर्ट)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats Deck -->
+            <div class="stats-deck">
+              <div class="stat-pill">
+                <div class="num">२५+</div>
+                <div class="lbl">वर्षे परंपरा</div>
+              </div>
+              <div class="stat-pill">
+                <div class="num">१००+</div>
+                <div class="lbl">रथ निर्माण</div>
+              </div>
+              <div class="stat-pill">
+                <div class="num">१००%</div>
+                <div class="lbl">विश्वासू काम</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const banner = document.getElementById('banner');
+    const wrapper = document.getElementById('wrapper');
+    const BANNER_W = 4800;
+    const BANNER_H = 1000;
+
+    function setScale(s) {
+      document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+
+      if (s === 'fit') {
+        const vw = Math.max(window.innerWidth - 30, 320);
+        s = vw / BANNER_W;
+        const btn = document.getElementById('btn-fit');
+        if (btn) btn.classList.add('active');
+      } else {
+        const map = { 0.18: 'btn-sm', 0.26: 'btn-md', 0.38: 'btn-lg', 0.55: 'btn-xl' };
+        const btn = document.getElementById(map[s]);
+        if (btn) btn.classList.add('active');
+      }
+
+      banner.style.transform = `scale(${s})`;
+      wrapper.style.width = (BANNER_W * s) + 'px';
+      wrapper.style.height = (BANNER_H * s) + 'px';
+    }
+
+    // Auto-fit immediately and when window resizes
+    setScale('fit');
+    window.addEventListener('resize', () => {
+      if (document.getElementById('btn-fit').classList.contains('active')) {
+        setScale('fit');
+      }
+    });
+
+    // Re-verify scale after all fonts and images finish loading
+    window.addEventListener('load', () => {
+      if (document.getElementById('btn-fit').classList.contains('active')) {
+        setScale('fit');
+      }
+    });
+  </script>
+
+</body>
+</html>

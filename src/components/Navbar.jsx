@@ -128,9 +128,23 @@ export default function Navbar() {
               <p className="font-devanagari text-xs font-semibold text-slate-800">
                 {t("business.name")}
               </p>
-              <p className="mt-1 text-[11px] font-medium text-amber-800">
-                📞 {phone} • 📍 संपूर्ण महाराष्ट्र सेवा
-              </p>
+              <div className="mt-1 flex items-center justify-center gap-2 text-[12px] font-bold text-amber-900">
+                <a
+                  href={`tel:${phone.replace(/\s+/g, "")}`}
+                  className="hover:underline hover:text-amber-700"
+                  title="कॉल करा (Call)"
+                >
+                  📞 {phone}
+                </a>
+                <span>•</span>
+                <Link
+                  to="/contact"
+                  className="hover:underline hover:text-amber-700"
+                  title="स्थान व संपर्क पहा (View Map & Contact)"
+                >
+                  📍 स्थान व नकाशे
+                </Link>
+              </div>
             </li>
           </ul>
         </div>

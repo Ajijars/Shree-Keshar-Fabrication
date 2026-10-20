@@ -7,8 +7,8 @@ export const siteData = {
     phone: "+91 96993 71940",
     whatsapp: "919699371940",
     email: "shreekesharfabrication@gmail.com",
-    address: "Near Main Road, Maharashtra",
-    mapLink: "#",
+    address: "Near Pravara madhyamik vidyalaya, Kolhar khurd (Nagar-Manmad highway), Tal: Rahuri, Dist: Ahilyanagar, Maharashtra",
+    mapLink: "https://www.google.com/maps/search/?api=1&query=Shree+Keshar+Fabrication+Works+Kolhar+khurd+Rahuri+Ahilyanagar",
   },
 
   owners: {

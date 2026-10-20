@@ -14,6 +14,11 @@ export default function Footer() {
   const phone2 = adminData.owners?.harsh?.phone || siteData.owners.harsh.phone
   const email = adminData.contact?.email || siteData.contact.email
   const address = adminData.contact?.address || siteData.contact.address
+  const mapLink = adminData.contact?.mapLink || siteData.contact.mapLink
+  const mapUrl =
+    mapLink && mapLink !== "#" && (mapLink.startsWith("http://") || mapLink.startsWith("https://"))
+      ? mapLink
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Shree Keshar Fabrication Works, " + (address || "Maharashtra"))}`
   const social = {
     facebook: adminData.social?.facebook || siteData.social.facebook,
     instagram: adminData.social?.instagram || siteData.social.instagram,
@@ -73,18 +78,54 @@ export default function Footer() {
 
             <div>
               <h4 className="font-display font-semibold text-gold-400">{t("footer.contact")}</h4>
-              <ul className="mt-4 space-y-3 text-sm text-white/60">
-                <li className="flex items-start gap-2">
+              <ul className="mt-4 space-y-3 text-sm text-white/70">
+                <li className="flex items-start gap-2.5">
                   <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
-                  <span>{phone1}{phone2 && phone2 !== phone1 ? ` / ${phone2}` : ""}</span>
+                  <div className="flex flex-col gap-0.5">
+                    <a
+                      href={`tel:${phone1.replace(/\s+/g, "")}`}
+                      className="transition hover:text-gold-400 hover:underline"
+                      title="कॉल करा (Call)"
+                    >
+                      {phone1}
+                    </a>
+                    {phone2 && phone2 !== phone1 && (
+                      <a
+                        href={`tel:${phone2.replace(/\s+/g, "")}`}
+                        className="transition hover:text-gold-400 hover:underline"
+                        title="कॉल करा (Call)"
+                      >
+                        {phone2}
+                      </a>
+                    )}
+                  </div>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <Mail className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
-                  <span>{email}</span>
+                  <a
+                    href={`mailto:${email}`}
+                    className="transition hover:text-gold-400 hover:underline break-all"
+                    title="ईमेल पाठवा (Send Email)"
+                  >
+                    {email}
+                  </a>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
-                  <span>{address}</span>
+                  <a
+                    href={mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex flex-col transition hover:text-gold-300"
+                    title="Google Maps वर उघडा (Open in Google Maps)"
+                  >
+                    <span className="text-white/80 group-hover:text-gold-300 group-hover:underline leading-relaxed">
+                      {address}
+                    </span>
+                    <span className="mt-1 inline-flex items-center gap-1 rounded-md bg-amber-500/20 px-2 py-0.5 text-[11px] font-bold text-amber-300 group-hover:bg-amber-500 group-hover:text-slate-950 transition w-fit">
+                      📍 Google Maps वर पहा ↗
+                    </span>
+                  </a>
                 </li>
               </ul>
             </div>
