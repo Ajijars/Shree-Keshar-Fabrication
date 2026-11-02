@@ -41,7 +41,8 @@ public/
 
 ## Admin Panel
 
-Access at `/admin` — password: `keshar2024`
+Access at `/admin`
+
 
 | Section | What it manages |
 |---------|----------------|
